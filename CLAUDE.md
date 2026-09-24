@@ -21,8 +21,7 @@ You have flexibility in how you structure and run these — use your judgment.
 - Treat Stitch's output as a **reference, not a source of truth**. Always review and adjust — don't copy results blindly.
 - Follow the **frontend-design** skill when reviewing and fixing Stitch output — it governs visual taste, typography, and distinctiveness decisions.
 - Use the **playwright** skill for UI inspection and review — rendering screens and checking them visually/structurally as part of the workflow, not just eyeballing code.
-- There is a reference folder containing **5 HTML files** representing the original wireframe layouts. These define layout *structure*, not styling. Follow the layout they show, but don't follow them strictly — treat them as structural guidance, not a pixel-exact spec.
-- The Figma wireframes/screenshots provided define the actual required layout — Stitch output must be reconciled against them, not the other way around.
+- The `references/` folder contains **5 HTML files** — these are the original wireframe layouts (converted from Figma) and define required layout *structure*, not styling. Stitch output must be reconciled against these layouts, not the other way around. Follow them for structure, but don't treat them as a pixel-exact spec.
 
 ## General
 

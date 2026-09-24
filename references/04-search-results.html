@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PlexFin - Search Results</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  display: flex;
+  min-height: 100vh;
+  background: #141414;
+  color: #fff;
+  font-family: sans-serif;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 80px;
+  flex-shrink: 0;
+  background: #0d0d0d;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 400px;
+  gap: 48px;
+}
+.sidebar ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  align-items: center;
+  width: 100%;
+}
+.nav-item a {
+  color: #ccc;
+  text-decoration: none;
+  font-size: 24px;
+}
+.nav-item.is-active a { color: #fff; }
+.search-flyout {
+  position: absolute;
+  left: 80px;
+  top: 0;
+  background: #222;
+  padding: 16px 20px;
+}
+.search-flyout input {
+  background: transparent;
+  border: none;
+  color: #999;
+  font-size: 18px;
+  outline: none;
+}
+.nav-item.nav-search { position: relative; }
+
+/* Main content */
+.content {
+  flex: 1;
+  overflow-x: hidden;
+}
+
+/* Hero */
+.hero {
+  position: relative;
+  min-height: 780px;
+  background: linear-gradient(to bottom, #666, #333);
+  display: flex;
+  align-items: flex-end;
+}
+.hero-info {
+  padding: 40px 48px;
+}
+.hero-title {
+  font-size: 64px;
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+.hero-meta {
+  list-style: none;
+  display: flex;
+  gap: 24px;
+  color: #ccc;
+  font-size: 18px;
+  margin-bottom: 32px;
+}
+.btn-watch-now {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  border: none;
+  padding: 18px 32px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Rows / grids of vertical cards */
+.row, .search-results, .ratings-accordion {
+  padding: 32px 48px;
+}
+.row-title, .search-results-title {
+  font-size: 28px;
+  font-weight: 400;
+  margin-bottom: 24px;
+}
+.row-items, .results-grid {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 16px;
+}
+.results-grid {
+  grid-auto-flow: row;
+  grid-template-columns: repeat(6, 1fr);
+  grid-auto-rows: min-content;
+  row-gap: 24px;
+}
+.card {
+  aspect-ratio: 2 / 3;
+  background: linear-gradient(to bottom, #6b6b6b, #262626);
+  width: 100%;
+}
+
+/* Accordion */
+.accordion-group { margin-bottom: 32px; }
+.accordion-header {
+  background: none;
+  border: none;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 24px;
+  cursor: pointer;
+  margin-bottom: 24px;
+}
+.accordion-caret { color: #fff; font-size: 18px; }
+.accordion-panel.is-collapsed { display: none; }
+.accordion-panel .row-items {
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+}
+
+</style>
+</head>
+<body>
+  <nav class="sidebar">
+    <ul>
+      <li class="nav-item nav-home"><a href="/">Home</a></li>
+      <li class="nav-item nav-search is-active"><a href="/search">Search</a></li>
+      <li class="nav-item nav-bookmarks"><a href="/bookmarks">Bookmarks</a></li>
+    </ul>
+  </nav>
+
+  <main class="content">
+    <section class="search-results">
+      <h1 class="search-results-title">Search result for &ldquo;supernatural&rdquo;</h1>
+
+      <div class="results-grid">
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+
+        <!-- grid continues, partially visible row cut off in reference -->
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
