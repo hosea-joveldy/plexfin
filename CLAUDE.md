@@ -27,3 +27,10 @@ You have flexibility in how you structure and run these — use your judgment.
 
 - Keep things simple. Prefer clear, idiomatic code over cleverness.
 - Brainstorm and make reasonable implementation decisions yourself where this doc doesn't specify — ask only when genuinely blocked.
+
+## Current Phase: UI-Only (No Backend)
+
+- This phase is for building a navigable UI only — no real data, no auth, no API calls, no database wiring.
+- Use mock/placeholder data (hardcoded arrays, dummy titles) wherever real data would normally come from the backend.
+- Buttons, links, and nav must be clickable/navigable between screens, but nothing needs to be functional (no working search, no real watch playback, no persistence).
+- Do not build FastAPI endpoints or touch PostgreSQL during this phase.
