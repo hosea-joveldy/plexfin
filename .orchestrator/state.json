@@ -1,0 +1,55 @@
+{
+  "project": "PlexFin",
+  "tasks": {
+    "01": {
+      "status": "pending",
+      "attempts": 0,
+      "failure_history": []
+    },
+    "02": {
+      "status": "pending",
+      "attempts": 0,
+      "failure_history": []
+    },
+    "03": {
+      "status": "pending",
+      "attempts": 0,
+      "failure_history": []
+    },
+    "04": {
+      "status": "pending",
+      "attempts": 0,
+      "failure_history": []
+    },
+    "05": {
+      "status": "pending",
+      "attempts": 0,
+      "failure_history": []
+    },
+    "06": {
+      "status": "pending",
+      "attempts": 0,
+      "failure_history": []
+    },
+    "07": {
+      "status": "pending",
+      "attempts": 0,
+      "failure_history": []
+    },
+    "08": {
+      "status": "pending",
+      "attempts": 0,
+      "failure_history": []
+    },
+    "09": {
+      "status": "pending",
+      "attempts": 0,
+      "failure_history": []
+    },
+    "10": {
+      "status": "pending",
+      "attempts": 0,
+      "failure_history": []
+    }
+  }
+}

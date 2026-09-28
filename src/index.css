@@ -1,0 +1,159 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Dark-only design: :root carries the same values as .dark so shadcn/ui
+       components resolve correctly without a class on <html>. */
+    --background: 0 0% 7.8%; /* #141414 */
+    --foreground: 0 0% 100%; /* #ffffff */
+
+    --card: 255 27% 12%; /* #1a1626 */
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 13.3%; /* #222222 */
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 38 78.5% 58%; /* #e8a940 */
+    --primary-foreground: 255 27% 12%; /* #1a1626 */
+
+    --secondary: 0 0% 13.3%; /* #222222 */
+    --secondary-foreground: 0 0% 80%; /* #cccccc */
+
+    --muted: 0 0% 13.3%; /* #222222 */
+    --muted-foreground: 0 0% 60%; /* #999999 */
+
+    --accent: 0 0% 15%; /* hover surfaces */
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 100% / 0.15; /* rgba(255,255,255,0.15) */
+    --input: 0 0% 100% / 0.15;
+    --ring: 38 78.5% 58%; /* #e8a940 */
+
+    --sidebar: 0 0% 5.1%; /* #0d0d0d */
+    --brand: 38 78.5% 58%; /* #e8a940 */
+    --brand-foreground: 255 27% 12%; /* #1a1626 */
+
+    --radius: 0.5rem;
+
+    /* Gradient endpoints used by the bg-gradient-* utilities. */
+    --gradient-hero-from: 0 0% 40%; /* #666666 */
+    --gradient-hero-to: 0 0% 20%; /* #333333 */
+    --gradient-card-from: 0 0% 42%; /* #6b6b6b */
+    --gradient-card-to: 0 0% 14.9%; /* #262626 */
+  }
+
+  .dark {
+    --background: 0 0% 7.8%; /* #141414 */
+    --foreground: 0 0% 100%; /* #ffffff */
+
+    --card: 255 27% 12%; /* #1a1626 */
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 13.3%; /* #222222 */
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 38 78.5% 58%; /* #e8a940 */
+    --primary-foreground: 255 27% 12%; /* #1a1626 */
+
+    --secondary: 0 0% 13.3%; /* #222222 */
+    --secondary-foreground: 0 0% 80%; /* #cccccc */
+
+    --muted: 0 0% 13.3%; /* #222222 */
+    --muted-foreground: 0 0% 60%; /* #999999 */
+
+    --accent: 0 0% 15%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 100% / 0.15;
+    --input: 0 0% 100% / 0.15;
+    --ring: 38 78.5% 58%; /* #e8a940 */
+
+    --sidebar: 0 0% 5.1%; /* #0d0d0d */
+    --brand: 38 78.5% 58%; /* #e8a940 */
+    --brand-foreground: 255 27% 12%; /* #1a1626 */
+
+    --gradient-hero-from: 0 0% 40%; /* #666666 */
+    --gradient-hero-to: 0 0% 20%; /* #333333 */
+    --gradient-card-from: 0 0% 42%; /* #6b6b6b */
+    --gradient-card-to: 0 0% 14.9%; /* #262626 */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply dark;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+      "Helvetica Neue", Arial, sans-serif;
+  }
+}
+
+@layer utilities {
+  /* Thin dark scrollbar for the main content area and horizontal rows. */
+  .scrollbar-dark {
+    scrollbar-color: hsl(0 0% 25%) transparent;
+    scrollbar-width: thin;
+  }
+
+  .scrollbar-dark::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+  }
+
+  .scrollbar-dark::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-dark::-webkit-scrollbar-thumb {
+    background-color: hsl(0 0% 25%);
+    border-radius: 9999px;
+  }
+
+  .scrollbar-dark::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(0 0% 35%);
+  }
+
+  .scrollbar-dark::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  /* Hero backdrop gradient (matches reference: #666 -> #333). */
+  .bg-gradient-hero {
+    background-image: linear-gradient(
+      to bottom,
+      hsl(var(--gradient-hero-from)),
+      hsl(var(--gradient-hero-to))
+    );
+  }
+
+  /* Poster/card placeholder gradient (matches reference: #6b6b6b -> #262626). */
+  .bg-gradient-card {
+    background-image: linear-gradient(
+      to bottom,
+      hsl(var(--gradient-card-from)),
+      hsl(var(--gradient-card-to))
+    );
+  }
+
+  /* Left-to-right scrim over hero imagery for text legibility. */
+  .bg-gradient-hero-scrim {
+    background-image: linear-gradient(
+      to top,
+      hsl(var(--background) / 1),
+      transparent
+    );
+  }
+}
