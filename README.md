@@ -34,6 +34,27 @@ All content is mock/placeholder data. Navigation between screens works, but noth
 
 ## Tech Stack
 
+### Supabase Backend Setup
+
+1. **Initialize Supabase Project**: Run `supabase init` in the project root.
+2. **Execute SQL Scripts**: Run SQL files in the following order:
+   - `001_create_tables.sql`
+   - `002_insert_mock_data.sql`
+   - `003_create_policies.sql`
+
+### Environment Variables
+
+Create a `.env` file with the following variables:
+
+```env
+SUPABASE_URL=your_supabase_url
+SUPABASE_ANON_KEY=your_anon_key
+```
+
+## Backend Integration Status
+
+- **Supabase**: Fully integrated for data persistence, authentication, and API communication.
+
 ### Backend (Supabase)
 - **Supabase**: Open-source Firebase alternative for backend services
   - Auth: User authentication

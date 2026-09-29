@@ -107,7 +107,9 @@ BEGIN
   RETURN QUERY SELECT 
     storage.get_public_url('thumbnails', format('thumbnails/%s/thumbnail.jpg', content_slug)) AS url;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER; runs SECURITY DEFINER, because each one
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- runs SECURITY DEFINER, because each one
 -- touches storage.objects (RLS-protected) or storage.buckets on the caller's
 -- behalf. Authorization is enforced explicitly in the body rather than being
 -- delegated to storage.objects policies, so the check is readable in one place.
