@@ -1,0 +1,47 @@
+-- -----------------------------------------------------------------------------
+-- reviews — one written review per user per content item
+-- -----------------------------------------------------------------------------
+create table if not exists public.reviews (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references public.users (id) on delete cascade,
+  content_id uuid not null references public.content (id) on delete cascade,
+  rating smallint check (rating is null or rating between 1 and 5),
+  title text,
+  body text not null,
+  is_spoiler boolean not null default false,
+  helpful_count integer not null default 0 check (helpful_count >= 0),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (user_id, content_id)
+);
+
+create index if not exists reviews_content_id_idx on public.reviews (content_id);
+create index if not exists reviews_user_id_idx on public.reviews (user_id);
+create index if not exists reviews_content_id_created_at_idx
+  on public.reviews (content_id, created_at desc);
+
+create trigger reviews_set_updated_at
+  before update on public.reviews
+  for each row execute function public.set_updated_at();
+
+-- -----------------------------------------------------------------------------
+-- settings — one row per user, created alongside the account
+-- -----------------------------------------------------------------------------
+create table if not exists public.settings (
+  user_id uuid primary key references public.users (id) on delete cascade,
+  email_notifications boolean not null default true,
+  push_notifications boolean not null default true,
+  auto_play_next boolean not null default true,
+  show_profile_to_others boolean not null default false,
+  preferred_language text not null default 'en',
+  playback_quality text not null default 'auto'
+    check (playback_quality in ('auto', 'low', 'medium', 'high')),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists settings_preferred_language_idx on public.settings (preferred_language);
+
+create trigger settings_set_updated_at
+  before update on public.settings
+  for each row execute function public.set_updated_at();

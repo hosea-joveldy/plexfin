@@ -1,17 +1,24 @@
 import Hero from "@/components/home/Hero";
 import ContentRow from "@/components/home/ContentRow";
-import { contentRows } from "@/data/mock-rows";
+import Hero from '@/components/home/Hero';
+import ContentRow from '@/components/home/ContentRow';
+import useContent from '@/hooks/useContent';
 
 export default function Home() {
+  const { featuredContent, contentRows, loading, error } = useContent();
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
   return (
     <div className="flex flex-col">
-      <Hero />
-      {contentRows.map((row) => (
+      <Hero content={featuredContent} />
+      {contentRows.map((row, index) => (
         <ContentRow
-          key={row.id}
+          key={index}
           title={row.title}
           items={row.items}
-          showProgress={row.id === "continue-watching"}
+          showProgress={row.type === 'continue_watching'}
         />
       ))}
     </div>

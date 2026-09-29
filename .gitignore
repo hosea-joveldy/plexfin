@@ -1,0 +1,7 @@
+node_modules/
+.env
+supabase/auth-setup.sql
+supabase/rls.sql
+supabase/storage-setup.sql
+supabase/schema.sql
+supabase/rpc*.sql

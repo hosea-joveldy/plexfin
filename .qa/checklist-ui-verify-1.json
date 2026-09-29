@@ -1,0 +1,26 @@
+{
+  "task_id": "ui-verify",
+  "attempt": 1,
+  "items": [
+    { "check": "Sidebar logo renders the PlexFin SVG icon (inline svg viewBox 0 0 160 160 with brand polygons, not a generic lucide icon)", "result": "pass" },
+    { "check": "Sidebar nav items show text labels (tooltips) on hover — Home, Ratings, Settings verified visible on hover; Search is a button trigger, flyout opens instead", "result": "pass" },
+    { "check": "Sidebar expands to 240px on hover", "result": "fail", "expected": "nav width grows from 80px to 240px on hover", "actual": "nav width stays 80px at 100ms/300ms/600ms/1s/1.5s/2s/3s after hover; no expand transition exists in code (Sidebar.tsx has fixed w-[80px], no group-hover width class)", "repro": "open http://localhost:5199/, hover anywhere over the left sidebar, measure nav[aria-label=Primary] bounding box width — stays 80px" },
+    { "check": "Main content shifts right when sidebar expands", "result": "fail", "expected": "#main-content x-position increases past 80px when sidebar expands", "actual": "main content x stays at 80px (MainContent.tsx has fixed ml-[80px], no reaction to sidebar hover)", "repro": "open http://localhost:5199/, hover sidebar, compare #main-content boundingBox x before/after — unchanged at 80px" },
+    { "check": "Route / (Home) navigable via sidebar and renders content", "result": "pass" },
+    { "check": "Route /search renders search results page", "result": "pass" },
+    { "check": "Route /ratings renders ratings filter page", "result": "pass" },
+    { "check": "Route /settings renders settings page", "result": "pass" },
+    { "check": "Search flyout opens via sidebar search icon, input auto-focused, aria-expanded toggles, closes via Escape", "result": "pass" },
+    { "check": "Search flyout closes via outside click", "result": "pass" },
+    { "check": "Search flyout submits and navigates to /search?q=...", "result": "pass" },
+    { "check": "Recent searches shown in flyout", "result": "pass" },
+    { "check": "No horizontal overflow at 1024px", "result": "pass" },
+    { "check": "No horizontal overflow at 768px", "result": "pass" },
+    { "check": "All routes usable at 1024px", "result": "pass" },
+    { "check": "All routes usable at 768px", "result": "pass" },
+    { "check": "Focus-visible ring appears on keyboard focus (Tab through nav)", "result": "pass" },
+    { "check": "Keyboard: Enter activates nav links, opens flyout; Escape closes flyout", "result": "pass" },
+    { "check": "Tooltip shows on keyboard focus", "result": "pass" },
+    { "check": "No console errors across all routes", "result": "pass" }
+  ]
+}

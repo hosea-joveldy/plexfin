@@ -1,0 +1,42 @@
+189 | -- -----------------------------------------------------------------------------
+190 | -- content_ratings — aggregate view of user ratings per content item
+191 | -- -----------------------------------------------------------------------------
+192 | create table if not exists public.content_ratings (
+193 |   content_id uuid primary key references public.content (id) on delete cascade,
+194 |   average_rating numeric(3, 2) not null default 0 check (average_rating between 0 and 5),
+195 |   rating_count integer not null default 0 check (rating_count >= 0),
+196 |   -- Denormalised counters kept for fast "trending" style sorting
+197 |   five_star_count integer not null default 0 check (five_star_count >= 0),
+198 |   four_star_count integer not null default 0 check (four_star_count >= 0),
+199 |   three_star_count integer not null default 0 check (three_star_count >= 0),
+200 |   two_star_count integer not null default 0 check (two_star_count >= 0),
+201 |   one_star_count integer not null default 0 check (one_star_count >= 0),
+202 |   updated_at timestamptz not null default now()
+203 | );
+204 | 
+205 | comment on table public.content_ratings is
+206 |   'Per-content aggregate of user ratings, recalculated by RPC get_content_ratings.';
+207 | 
+208 | create index if not exists content_ratings_average_rating_idx
+209 |   on public.content_ratings (average_rating desc);
+210 | 
+211 | create trigger content_ratings_set_updated_at
+212 |   before update on public.content_ratings
+213 |   for each row execute function public.set_updated_at();
+214 | 
+215 | -- -----------------------------------------------------------------------------
+216 | -- watch_history — playback progress per user per content item
+217 | -- -----------------------------------------------------------------------------
+218 | create table if not exists public.watch_history (
+219 |   id uuid primary key default gen_random_uuid(),
+220 |   user_id uuid not null references public.users (id) on delete cascade,
+221 |   content_id uuid not null references public.content (id) on delete cascade,
+222 |   progress_percent numeric(5, 2) not null default 0
+223 |     check (progress_percent between 0 and 100),
+224 |   position_seconds integer not null default 0 check (position_seconds >= 0),
+225 |   completed boolean not null default false,
+226 |   watch_count integer not null default 0 check (watch_count >= 0),
+227 |   first_watched_at timestamptz not null default now(),
+228 |   last_watched_at timestamptz not null default now(),
+229 |   created_at timestamptz not null default now(),
+230 |   updated_at timestamptz not null default now(),

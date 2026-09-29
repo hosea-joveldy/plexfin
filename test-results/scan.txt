@@ -1,0 +1,197 @@
+src/data/mock-rows.ts:1: import type { ContentItem, ContentRow } from "./types"
+src/data/mock-rows.ts:8: function placeholder(portrait: boolean, title: string): string {
+src/data/mock-rows.ts:16: id: string
+src/data/mock-rows.ts:17: title: string
+src/data/mock-rows.ts:24: /** Watch progress for Continue Watching items (0–100). */
+src/data/mock-rows.ts:42: const continueWatchingItems: ContentItem[] = [
+src/data/mock-rows.ts:44: id: "static-harbor",
+src/data/mock-rows.ts:45: title: "Static Harbor",
+src/data/mock-rows.ts:56: id: "paper-moons",
+src/data/mock-rows.ts:57: title: "Paper Moons",
+src/data/mock-rows.ts:68: id: "the-salt-line",
+src/data/mock-rows.ts:69: title: "The Salt Line",
+src/data/mock-rows.ts:80: id: "corner-office-ghosts",
+src/data/mock-rows.ts:81: title: "Corner Office Ghosts",
+src/data/mock-rows.ts:92: id: "nine-minutes-of-sun",
+src/data/mock-rows.ts:93: title: "Nine Minutes of Sun",
+src/data/mock-rows.ts:109: const trendingItems: ContentItem[] = [
+src/data/mock-rows.ts:111: id: "the-last-lighthouse",
+src/data/mock-rows.ts:112: title: "The Last Lighthouse",
+src/data/mock-rows.ts:122: id: "velocity-hours",
+src/data/mock-rows.ts:123: title: "Velocity Hours",
+src/data/mock-rows.ts:133: id: "greenhouse-seven",
+src/data/mock-rows.ts:134: title: "Greenhouse Seven",
+src/data/mock-rows.ts:136: "Seven botanists locked in an arctic greenhouse argue over the only seed that still grows.",
+src/data/mock-rows.ts:144: id: "the-understudy",
+src/data/mock-rows.ts:145: title: "The Understudy",
+src/data/mock-rows.ts:155: id: "marginalia",
+src/data/mock-rows.ts:156: title: "Marginalia",
+src/data/mock-rows.ts:166: id: "the-long-detour",
+src/data/mock-rows.ts:167: title: "The Long Detour",
+src/data/mock-rows.ts:182: const actionItems: ContentItem[] = [
+src/data/mock-rows.ts:184: id: "velocity-hours",
+src/data/mock-rows.ts:185: title: "Velocity Hours",
+src/data/mock-rows.ts:195: id: "dead-reckoning-run",
+src/data/mock-rows.ts:196: title: "Dead Reckoning Run",
+src/data/mock-rows.ts:206: id: "the-extraction-pigeon",
+src/data/mock-rows.ts:207: title: "The Extraction Pigeon",
+src/data/mock-rows.ts:217: id: "cold-open",
+src/data/mock-rows.ts:218: title: "Cold Open",
+src/data/mock-rows.ts:228: id: "nightshift-ninety",
+src/data/mock-rows.ts:229: title: "Nightshift Ninety",
+src/data/mock-rows.ts:239: id: "gravity-debt",
+src/data/mock-rows.ts:240: title: "Gravity Debt",
+src/data/mock-rows.ts:255: const dramaItems: ContentItem[] = [
+src/data/mock-rows.ts:257: id: "the-understudy",
+src/data/mock-rows.ts:258: title: "The Understudy",
+src/data/mock-rows.ts:268: id: "the-salt-line",
+src/data/mock-rows.ts:269: title: "The Salt Line",
+src/data/mock-rows.ts:279: id: "greenhouse-seven",
+src/data/mock-rows.ts:280: title: "Greenhouse Seven",
+src/data/mock-rows.ts:282: "Seven botanists locked in an arctic greenhouse argue over the only seed that still grows.",
+src/data/mock-rows.ts:290: id: "static-harbor",
+src/data/mock-rows.ts:291: title: "Static Harbor",
+src/data/mock-rows.ts:301: id: "the-last-lighthouse",
+src/data/mock-rows.ts:302: title: "The Last Lighthouse",
+src/data/mock-rows.ts:312: id: "inheritance-of-small-things",
+src/data/mock-rows.ts:313: title: "Inheritance of Small Things",
+src/data/mock-rows.ts:328: const comedyItems: ContentItem[] = [
+src/data/mock-rows.ts:330: id: "paper-moons",
+src/data/mock-rows.ts:331: title: "Paper Moons",
+src/data/mock-rows.ts:341: id: "corner-office-ghosts",
+src/data/mock-rows.ts:342: title: "Corner Office Ghosts",
+src/data/mock-rows.ts:352: id: "nine-minutes-of-sun",
+src/data/mock-rows.ts:353: title: "Nine Minutes of Sun",
+src/data/mock-rows.ts:363: id: "the-extraction-pigeon",
+src/data/mock-rows.ts:364: title: "The Extraction Pigeon",
+src/data/mock-rows.ts:374: id: "the-long-detour",
+src/data/mock-rows.ts:375: title: "The Long Detour",
+src/data/mock-rows.ts:385: id: "committee-of-one",
+src/data/mock-rows.ts:386: title: "Committee of One",
+src/data/mock-rows.ts:401: const sciFiItems: ContentItem[] = [
+src/data/mock-rows.ts:403: id: "greenhouse-seven",
+src/data/mock-rows.ts:404: title: "Greenhouse Seven",
+src/data/mock-rows.ts:406: "Seven botanists locked in an arctic greenhouse argue over the only seed that still grows.",
+src/data/mock-rows.ts:414: id: "the-salt-line",
+src/data/mock-rows.ts:415: title: "The Salt Line",
+src/data/mock-rows.ts:425: id: "gravity-debt",
+src/data/mock-rows.ts:426: title: "Gravity Debt",
+src/data/mock-rows.ts:436: id: "nine-minutes-of-sun",
+src/data/mock-rows.ts:437: title: "Nine Minutes of Sun",
+src/data/mock-rows.ts:447: id: "the-orbit-of-houses",
+src/data/mock-rows.ts:448: title: "The Orbit of Houses",
+src/data/mock-rows.ts:458: id: "signal-garden",
+src/data/mock-rows.ts:459: title: "Signal Garden",
+src/data/mock-rows.ts:461: "A retired astronomer grows plants from seeds that arrived on a signal she decoded herself.",
+src/data/mock-rows.ts:471: /* Rows                                                                 */
+src/data/mock-rows.ts:474: export const continueWatchingRow: ContentRow = {
+src/data/mock-rows.ts:475: id: "continue-watching",
+src/data/mock-rows.ts:476: title: "Continue Watching",
+src/data/mock-rows.ts:477: items: continueWatchingItems,
+src/data/mock-rows.ts:480: export const trendingRow: ContentRow = {
+src/data/mock-rows.ts:481: id: "trending-now",
+src/data/mock-rows.ts:482: title: "Trending Now",
+src/data/mock-rows.ts:483: items: trendingItems,
+src/data/mock-rows.ts:486: export const actionRow: ContentRow = {
+src/data/mock-rows.ts:487: id: "action",
+src/data/mock-rows.ts:488: title: "Action",
+src/data/mock-rows.ts:489: items: actionItems,
+src/data/mock-rows.ts:492: export const dramaRow: ContentRow = {
+src/data/mock-rows.ts:493: id: "drama",
+src/data/mock-rows.ts:494: title: "Drama",
+src/data/mock-rows.ts:495: items: dramaItems,
+src/data/mock-rows.ts:498: export const comedyRow: ContentRow = {
+src/data/mock-rows.ts:499: id: "comedy",
+src/data/mock-rows.ts:500: title: "Comedy",
+src/data/mock-rows.ts:501: items: comedyItems,
+src/data/mock-rows.ts:504: export const sciFiRow: ContentRow = {
+src/data/mock-rows.ts:505: id: "sci-fi",
+src/data/mock-rows.ts:506: title: "Sci-Fi",
+src/data/mock-rows.ts:507: items: sciFiItems,
+src/data/mock-rows.ts:510: /** All home page rows, in display order. */
+src/data/mock-rows.ts:511: export const contentRows: ContentRow[] = [
+src/data/mock-rows.ts:512: continueWatchingRow,
+src/data/mock-rows.ts:513: trendingRow,
+src/data/mock-rows.ts:514: actionRow,
+src/data/mock-rows.ts:515: dramaRow,
+src/data/mock-rows.ts:516: comedyRow,
+src/data/mock-rows.ts:517: sciFiRow,
+src/data/mock-rows.ts:520: /** Flat list of every unique item in the catalog (rows deduplicated by id). */
+src/data/mock-rows.ts:523: contentRows
+src/data/mock-rows.ts:524: .flatMap((row) => row.items)
+src/data/mockRatings.ts:11: id: string;
+src/data/mockRatings.ts:12: title: string;
+src/data/mockRatings.ts:27: id: string;
+src/data/mockRatings.ts:32: id: string;
+src/data/mockRatings.ts:42: id: string;
+src/data/mockRatings.ts:56: { id: "rt-1", title: "The Last Horizon", year: 2024, rating: "PG-13", starRating: 8.4, genre: "Sci-Fi", durationMinutes: 142, language: "English", thumbnail: thumb("rt-1"), type: "movie" },
+src/data/mockRatings.ts:57: { id: "rt-2", title: "Beyond the Stars", year: 2024, rating: "TV-14", starRating: 7.9, genre: "Sci-Fi", durationMinutes: 55, language: "English", thumbnail: thumb("rt-2"), type: "show" },
+src/data/mockRatings.ts:58: { id: "rt-3", title: "Midnight Runner", year: 2023, rating: "R", starRating: 9.1, genre: "Thriller", durationMinutes: 118, language: "English", thumbnail: thumb("rt-3"), type: "movie" },
+src/data/mockRatings.ts:59: { id: "rt-4", title: "Shadows of the Past", year: 2022, rating: "TV-MA", starRating: 8.8, genre: "Drama", durationMinutes: 48, language: "English", thumbnail: thumb("rt-4"), type: "show" },
+src/data/mockRatings.ts:60: { id: "rt-5", title: "Quantum Leap", year: 2024, rating: "PG-13", starRating: 6.2, genre: "Action", durationMinutes: 139, language: "English", thumbnail: thumb("rt-5"), type: "movie" },
+src/data/mockRatings.ts:61: { id: "rt-6", title: "The Silent Witness", year: 2023, rating: "R", starRating: 7.5, genre: "Mystery", durationMinutes: 112, language: "French", thumbnail: thumb("rt-6"), type: "movie" },
+src/data/mockRatings.ts:62: { id: "rt-7", title: "Golden Hour", year: 2022, rating: "PG", starRating: 5.8, genre: "Romance", durationMinutes: 98, language: "English", thumbnail: thumb("rt-7"), type: "movie" },
+src/data/mockRatings.ts:63: { id: "rt-8", title: "Night Whispers", year: 2021, rating: "TV-14", starRating: 7.1, genre: "Horror", durationMinutes: 44, language: "Japanese", thumbnail: thumb("rt-8"), type: "show" },
+src/data/mockRatings.ts:64: { id: "rt-9", title: "Steel Vengeance", year: 2024, rating: "R", starRating: 8.9, genre: "Action", durationMinutes: 127, language: "English", thumbnail: thumb("rt-9"), type: "movie" },
+src/data/mockRatings.ts:65: { id: "rt-10", title: "Paper Lanterns", year: 2020, rating: "PG", starRating: 6.9, genre: "Drama", durationMinutes: 105, language: "Japanese", thumbnail: thumb("rt-10"), type: "movie" },
+src/data/mockRatings.ts:66: { id: "rt-11", title: "Echoes of Tomorrow", year: 2023, rating: "TV-PG", starRating: 7.3, genre: "Sci-Fi", durationMinutes: 52, language: "English", thumbnail: thumb("rt-11"), type: "show" },
+src/data/mockRatings.ts:67: { id: "rt-12", title: "The Final Verdict", year: 2019, rating: "R", starRating: 9.4, genre: "Thriller", durationMinutes: 134, language: "English", thumbnail: thumb("rt-12"), type: "movie" },
+src/data/mockRatings.ts:68: { id: "rt-13", title: "Whispers in the Dark", year: 2021, rating: "TV-MA", starRating: 8.1, genre: "Horror", durationMinutes: 47, language: "Spanish", thumbnail: thumb("rt-13"), type: "show" },
+src/data/mockRatings.ts:69: { id: "rt-14", title: "Chasing Daylight", year: 2022, rating: "PG-13", starRating: 6.5, genre: "Adventure", durationMinutes: 121, language: "English", thumbnail: thumb("rt-14"), type: "movie" },
+src/data/mockRatings.ts:70: { id: "rt-15", title: "Crimson Tide Rising", year: 2020, rating: "R", starRating: 7.7, genre: "Action", durationMinutes: 116, language: "English", thumbnail: thumb("rt-15"), type: "movie" },
+src/data/mockRatings.ts:71: { id: "rt-16", title: "The Forgotten Kingdom", year: 2018, rating: "PG-13", starRating: 8.6, genre: "Fantasy", durationMinutes: 148, language: "English", thumbnail: thumb("rt-16"), type: "movie" },
+src/data/mockRatings.ts:72: { id: "rt-17", title: "Velvet Dreams", year: 2019, rating: "PG", starRating: 5.4, genre: "Romance", durationMinutes: 96, language: "French", thumbnail: thumb("rt-17"), type: "movie" },
+src/data/mockRatings.ts:73: { id: "rt-18", title: "Silent Orbit", year: 2024, rating: "TV-G", starRating: 7.0, genre: "Documentary", durationMinutes: 41, language: "English", thumbnail: thumb("rt-18"), type: "show" },
+src/data/mockRatings.ts:74: { id: "rt-19", title: "Broken Strings", year: 2021, rating: "TV-14", starRating: 6.8, genre: "Drama", durationMinutes: 108, language: "Spanish", thumbnail: thumb("rt-19"), type: "movie" },
+src/data/mockRatings.ts:75: { id: "rt-20", title: "Last Train Home", year: 2023, rating: "R", starRating: 9.0, genre: "Thriller", durationMinutes: 103, language: "Korean", thumbnail: thumb("rt-20"), type: "movie" },
+src/data/mockRatings.ts:76: { id: "rt-21", title: "City of Glass", year: 2017, rating: "PG-13", starRating: 8.2, genre: "Mystery", durationMinutes: 129, language: "English", thumbnail: thumb("rt-21"), type: "movie" },
+src/data/mockRatings.ts:77: { id: "rt-22", title: "The Art of Falling", year: 2022, rating: "TV-14", starRating: 7.6, genre: "Comedy", durationMinutes: 32, language: "English", thumbnail: thumb("rt-22"), type: "show" },
+src/data/mockRatings.ts:78: { id: "rt-23", title: "Frostbite", year: 2020, rating: "R", starRating: 6.1, genre: "Horror", durationMinutes: 94, language: "English", thumbnail: thumb("rt-23"), type: "movie" },
+src/data/mockRatings.ts:79: { id: "rt-24", title: "Sunset Boulevard Nights", year: 2016, rating: "PG-13", starRating: 9.2, genre: "Drama", durationMinutes: 137, language: "English", thumbnail: thumb("rt-24"), type: "movie" },
+src/data/mockRatings.ts:87: { id: "action", label: "Action" },
+src/data/mockRatings.ts:88: { id: "adventure", label: "Adventure" },
+src/data/mockRatings.ts:89: { id: "comedy", label: "Comedy" },
+src/data/mockRatings.ts:90: { id: "documentary", label: "Documentary" },
+src/data/mockRatings.ts:91: { id: "drama", label: "Drama" },
+src/data/mockRatings.ts:92: { id: "fantasy", label: "Fantasy" },
+src/data/mockRatings.ts:93: { id: "horror", label: "Horror" },
+src/data/mockRatings.ts:94: { id: "mystery", label: "Mystery" },
+src/data/mockRatings.ts:95: { id: "romance", label: "Romance" },
+src/data/mockRatings.ts:96: { id: "sci-fi", label: "Sci-Fi" },
+src/data/mockRatings.ts:97: { id: "thriller", label: "Thriller" },
+src/data/mockRatings.ts:101: { id: "english", label: "English" },
+src/data/mockRatings.ts:102: { id: "french", label: "French" },
+src/data/mockRatings.ts:103: { id: "japanese", label: "Japanese" },
+src/data/mockRatings.ts:104: { id: "korean", label: "Korean" },
+src/data/mockRatings.ts:105: { id: "spanish", label: "Spanish" },
+src/data/mockRatings.ts:112: { id: "under-60", label: "Under 60 min", min: null, max: 59 },
+src/data/mockRatings.ts:113: { id: "60-90", label: "60–90 min", min: 60, max: 90 },
+src/data/mockRatings.ts:114: { id: "90-120", label: "90–120 min", min: 91, max: 120 },
+src/data/mockRatings.ts:115: { id: "over-120", label: "Over 2 hours", min: 121, max: null },
+src/data/mockRatings.ts:162: items: RatingsFilterDataItem[],
+src/data/mockRatings.ts:165: return items.filter((item) => {
+src/data/mockRatings.ts:186: /** Number of catalog items each sidebar section would keep, for count badges. */
+src/data/mockRatings.ts:187: export function countMatchingGenre(items: RatingsFilterDataItem[], state: RatingsFilterState, genre: string): number {
+src/data/mockRatings.ts:188: return items.filter(
+src/data/mock-search.ts:1: import { allContent } from "./mock-rows"
+src/data/mock-search.ts:8: * page; includes the hero item, which is not part of any row.
+src/data/mock-hero.ts:9: id: "the-last-lighthouse",
+src/data/mock-hero.ts:10: title: "The Last Lighthouse",
+src/pages/Home.tsx:2: import ContentRow from "@/components/home/ContentRow";
+src/pages/Home.tsx:3: import { contentRows } from "@/data/mock-rows";
+src/pages/Home.tsx:9: {contentRows.map((row) => (
+src/pages/Home.tsx:10: <ContentRow
+src/pages/Home.tsx:11: key={row.id}
+src/pages/Home.tsx:12: title={row.title}
+src/pages/Home.tsx:13: items={row.items}
+src/pages/Home.tsx:14: showProgress={row.id === "continue-watching"}
+src/pages/SearchResultsPage.tsx:23: * as a browsable catalog view.
+src/pages/SearchResultsPage.tsx:88: <div className="mb-8 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+src/pages/SearchResultsPage.tsx:97: "Browse the catalog"
+src/pages/SearchResultsPage.tsx:113: <SearchResultsGrid items={results} />
+src/components/home/Hero.tsx:19: "relative flex min-h-[780px] w-full items-end overflow-hidden bg-gradient-hero",
+src/pages/RatingsFilter.tsx:110: <h1 className="text-2xl font-medium text-white">Browse by rating</h1>
+src/pages/RatingsFilter.tsx:112: Slice the catalog by star score, then narrow it down with genre,
+src/pages/RatingsFilter.tsx:119: items={results.map((item) => ({
+src/pages/RatingsFilter.tsx:120: id: item.id,
+src/pages/RatingsFilter.tsx:121: title: item.title,

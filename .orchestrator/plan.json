@@ -1,214 +1,206 @@
 {
-  "project": "PlexFin",
+  "project": "PlexFin Backend with Supabase",
   "tasks": [
     {
       "id": "01",
-      "title": "Project Setup - React + Tailwind + shadcn/ui",
+      "title": "Set up Supabase project and create tables",
       "depends_on": [],
       "has_ui": false,
-      "description": "Initialize React project with Vite, install and configure Tailwind CSS, install shadcn/ui components library. Set up project structure with src/components, src/pages, src/hooks, src/lib, src/data folders. Configure path aliases (@/ for src). Install react-router-dom for navigation. Create basic App.tsx with router outlet.",
+      "description": "Create Supabase project, configure authentication, and create database schema with tables: users, profiles, content, genres, content_genres, languages, ratings, content_ratings, watch_history, reviews, settings. Include proper indexes and foreign keys.",
       "files": [
-        "package.json",
-        "vite.config.ts",
-        "tailwind.config.js",
-        "postcss.config.js",
-        "src/main.tsx",
-        "src/App.tsx",
-        "src/index.css",
-        "tsconfig.json",
-        "tsconfig.node.json",
-        "components.json"
-      ],
-      "priority": "high"
+        "supabase/schema.sql"
+      ]
     },
     {
       "id": "02",
-      "title": "Design System Configuration - Dark Theme",
-      "depends_on": ["01"],
-      "has_ui": false,
-      "description": "Configure Tailwind theme with dark mode colors: background #141414, sidebar #0d0d0d, accent colors from reference files. Set up shadcn/ui with dark theme. Configure typography scale (font sizes, weights) matching reference HTML. Define CSS variables for consistent theming. Add custom Tailwind utilities for gradient backgrounds, scrollbar styling.",
-      "files": [
-        "tailwind.config.js",
-        "src/index.css",
-        "components.json",
-        "src/lib/utils.ts"
+      "title": "Implement content management RPC functions",
+      "depends_on": [
+        "01"
       ],
-      "priority": "high"
+      "has_ui": false,
+      "description": "Create Stored Procedures (RPC) for: get_content_list (with pagination, filters), get_content_by_id, get_content_by_genre, get_trending_content, get_continue_watching, get_new_releases, search_content (full-text), get_related_content, get_all_genres, get_all_languages, get_content_by_rating_range.",
+      "files": [
+        "supabase/rpc.sql"
+      ]
     },
     {
       "id": "03",
-      "title": "Mock Data Layer",
-      "depends_on": ["01"],
-      "has_ui": false,
-      "description": "Create mock data files for content: featured hero content, content rows (Continue Watching, Trending Now, By Genre, Top Rated, New Releases), search results, ratings filter data. Include placeholder thumbnail URLs (using placeholder image services), titles, metadata (year, rating, genre, duration), and descriptions. Export as TypeScript constants for type safety.",
-      "files": [
-        "src/data/mockContent.ts",
-        "src/data/mockHero.ts",
-        "src/data/mockSearchResults.ts",
-        "src/data/mockRatings.ts"
+      "title": "Set up storage buckets and upload logic",
+      "depends_on": [
+        "01"
       ],
-      "priority": "high"
+      "has_ui": false,
+      "description": "Create two storage buckets: 'videos' for video files (private) and 'thumbnails' for content thumbnails (public). Implement upload endpoints/functions: upload_video, upload_thumbnail, get_video_url, get_thumbnail_url. Set up CORS and storage policies for authorized uploads.",
+      "files": [
+        "supabase/storage-setup.sql"
+      ]
     },
     {
       "id": "04",
-      "title": "Sidebar Component - Persistent Navigation",
-      "depends_on": ["01", "02"],
-      "has_ui": true,
-      "description": "Build persistent 80px sidebar component with fixed positioning. Include navigation items: Home (active), Search, Ratings, Settings. Use shadcn/ui Sidebar or custom implementation matching reference: dark background #0d0d0d, icons with #ccc default / #fff active state, 48px gap between items. Search icon triggers flyout overlay. Position at left, full height, z-index above content.",
-      "files": [
-        "src/components/layout/Sidebar.tsx",
-        "src/components/layout/SidebarNavItem.tsx",
-        "src/components/layout/SearchFlyout.tsx"
+      "title": "Configure Row Level Security policies",
+      "depends_on": [
+        "01"
       ],
-      "priority": "high"
+      "has_ui": false,
+      "description": "Create RLS policies for all tables: public users can view content but not modify; users can view their own profile; users can read/write their own watch_history and reviews; admins can manage content; profiles are private except for public display fields. Use authenticated() and current_user_id() functions.",
+      "files": [
+        "supabase/rls.sql"
+      ]
     },
     {
       "id": "05",
-      "title": "Layout Wrapper - Main Content Area",
-      "depends_on": ["04"],
-      "has_ui": true,
-      "description": "Create Layout component that wraps all pages with Sidebar on left and main content area (flex: 1, overflow-x: hidden). Background #141414. Provide slot for page content. Handle responsive behavior - sidebar collapses on mobile or stays fixed. Export as reusable Layout component.",
-      "files": [
-        "src/components/layout/Layout.tsx",
-        "src/components/layout/MainContent.tsx"
+      "title": "Implement authentication flows",
+      "depends_on": [
+        "01"
       ],
-      "priority": "high"
+      "has_ui": false,
+      "description": "Configure Supabase auth with email/password, required fields (email, password, name), user signup validation, email verification, profile creation on signup, secure password policies. No auth UI needed (will be handled by React frontend SDK).",
+      "files": [
+        "supabase/auth-setup.sql"
+      ]
     },
     {
       "id": "06",
-      "title": "Hero Section Component",
-      "depends_on": ["03", "05"],
-      "has_ui": true,
-      "description": "Build Hero section component matching reference: min-height 780px, gradient background (to bottom, #666 to #333), hero info panel at bottom-left with padding 40px 48px. Display hero title (64px, font-weight 500), meta list (year, rating, genre, duration - 18px, #ccc, 24px gap), Watch Now button (rgba(255,255,255,0.15) bg, 18px 32px padding, 16px font). Add My List and Rate buttons. Use mock hero data.",
-      "files": [
-        "src/components/home/Hero.tsx",
-        "src/components/home/HeroMeta.tsx",
-        "src/components/home/HeroActions.tsx"
+      "title": "Create watch history tracking functions",
+      "depends_on": [
+        "02"
       ],
-      "priority": "high"
+      "has_ui": false,
+      "description": "Create RPC functions: start_watch_history (create new entry), update_watch_progress (update progress, timestamp), finish_watch_history (mark completed), get_watch_history, get_watch_progress (for continue watching). Store progress as percentage and last position timestamp.",
+      "files": [
+        "supabase/rpc-watch-history.sql"
+      ]
     },
     {
       "id": "07",
-      "title": "Content Row Component - Reusable",
-      "depends_on": ["03", "05"],
-      "has_ui": true,
-      "description": "Create reusable ContentRow component for horizontal scrolling rows: section title (24px, font-weight 500), horizontal scroll container with gap 16px, padding 0 48px. ContentCard child: thumbnail (aspect-ratio 2:3, rounded 4px), title overlay on hover, metadata. Support different row types (Continue Watching with progress bar, Trending, By Genre, etc.). Use mock content data.",
-      "files": [
-        "src/components/home/ContentRow.tsx",
-        "src/components/home/ContentCard.tsx",
-        "src/components/home/ContentCardSkeleton.tsx"
+      "title": "Implement user rating and review functions",
+      "depends_on": [
+        "02",
+        "01"
       ],
-      "priority": "high"
+      "has_ui": false,
+      "description": "Create RPC functions: create_rating (validate, insert rating), update_rating (check ownership, update), delete_rating, get_user_rating, get_content_ratings (aggregate ratings, calculate average), create_review (validate, insert), update_review, delete_review, get_reviews_for_content. Require user authentication.",
+      "files": [
+        "supabase/rpc-ratings.sql"
+      ]
     },
     {
       "id": "08",
-      "title": "Home Page - Hero + Content Rows Assembly",
-      "depends_on": ["05", "06", "07"],
-      "has_ui": true,
-      "description": "Assemble Home page using Layout wrapper: Hero section at top, followed by multiple ContentRow components (Continue Watching, Trending Now, Action, Comedy, Drama, Horror, Sci-Fi, Top Rated, New Releases). Vertical spacing between rows. Full page scroll. Connect mock data. Route at '/'.",
-      "files": [
-        "src/pages/Home.tsx"
+      "title": "Create user settings management functions",
+      "depends_on": [
+        "02",
+        "01"
       ],
-      "priority": "high"
+      "has_ui": false,
+      "description": "Create RPC functions: get_user_settings, update_user_settings (notifications, autoplay preferences, profile visibility, language preference). Support toggleable settings: email_notifications, push_notifications, auto_play_next, show_profile_to_others, preferred_language.",
+      "files": [
+        "supabase/rpc-settings.sql"
+      ]
     },
     {
       "id": "09",
-      "title": "Search Overlay Component",
-      "depends_on": ["04", "05"],
-      "has_ui": true,
-      "description": "Build search overlay triggered from sidebar search icon: full-screen overlay (fixed inset-0, bg #141414/rgba(0,0,0,0.9)), large search input centered (transparent bg, no border, 48px font, placeholder 'Search movies, shows...'), recent searches list below, close on Escape or click outside. Flyout from sidebar search icon also works as quick search. State managed via context or props.",
-      "files": [
-        "src/components/search/SearchOverlay.tsx",
-        "src/components/search/SearchInput.tsx",
-        "src/components/search/RecentSearches.tsx"
+      "title": "Create seeding scripts for initial data",
+      "depends_on": [
+        "01"
       ],
-      "priority": "high"
+      "has_ui": false,
+      "description": "Create SQL script to seed: sample genres (Action, Comedy, Drama, Horror, Documentary, etc.), sample languages (English, Spanish, French, etc.), sample content with mock data (20-30 items) including title, description, year, duration, thumbnail URLs, video URLs, rating metadata. Use Supabase seed API or direct SQL INSERT.",
+      "files": [
+        "supabase/seed.sql"
+      ]
     },
     {
       "id": "10",
-      "title": "Search Results Page",
-      "depends_on": ["05", "09"],
-      "has_ui": true,
-      "description": "Create Search Results page at '/search': Layout with sidebar, header showing search query and result count, grid of content cards (responsive: 2 col mobile, 4 tablet, 6 desktop), vertical scrolling. Filter tabs: All, Movies, Shows. Sort dropdown: Relevance, Rating, Release Date, A-Z. Use mock search results data. Empty state when no results.",
-      "files": [
-        "src/pages/SearchResults.tsx",
-        "src/components/search/SearchResultsGrid.tsx",
-        "src/components/search/SearchFilters.tsx"
+      "title": "Set up real-time subscriptions configuration",
+      "depends_on": [
+        "02"
       ],
-      "priority": "high"
+      "has_ui": false,
+      "description": "Configure Supabase real-time channels: 'content_updates' (trigger on content changes, notify via socket), 'watch_history_updates' (real-time progress tracking), 'rating_updates' (live rating changes). Enable real-time features for instant updates on content, progress, and ratings.",
+      "files": [
+        "supabase/realtime.sql"
+      ]
     },
     {
       "id": "11",
-      "title": "Ratings Filter Page",
-      "depends_on": ["05"],
-      "has_ui": true,
-      "description": "Build Ratings Filter page at '/ratings': Layout with sidebar. Two-column layout - left sidebar (280px) with filter accordions: Genre (multi-select), Rating Range (slider 0-10), Release Year (range), Duration, Language. Right panel: results grid same as search results. Apply/Reset filters buttons. Sticky filter summary. Use mock ratings filter data.",
-      "files": [
-        "src/pages/RatingsFilter.tsx",
-        "src/components/ratings/FilterSidebar.tsx",
-        "src/components/ratings/FilterAccordion.tsx",
-        "src/components/ratings/FilterChips.tsx",
-        "src/components/ratings/RatingSlider.tsx"
+      "title": "Create API helper utilities and types",
+      "depends_on": [
+        "02",
+        "06",
+        "07",
+        "08"
       ],
-      "priority": "high"
+      "has_ui": false,
+      "description": "Create TypeScript types matching database schema: Content, Genre, Language, Rating, Review, WatchHistory, UserProfile. Create Supabase client wrapper functions for each RPC function with proper error handling, TypeScript types, and request/response shapes matching frontend expectations.",
+      "files": [
+        "src/lib/supabase/api.ts",
+        "src/lib/supabase/types.ts"
+      ]
     },
     {
       "id": "12",
-      "title": "Routing & Navigation Integration",
-      "depends_on": ["04", "08", "10", "11"],
-      "has_ui": true,
-      "description": "Wire up react-router-dom routes: '/' -> Home, '/search' -> SearchResults, '/ratings' -> RatingsFilter. Connect Sidebar nav items to routes with active state highlighting. Search flyout/overlay navigates to /search with query param. Ensure browser back/forward works. Add loading states for route transitions.",
+      "title": "Create backend configuration and environment setup",
+      "depends_on": [],
+      "has_ui": false,
+      "description": "Create Supabase configuration file (src/lib/supabase/config.ts) with environment variable loading, initialize Supabase client with auth settings and storage URLs. Create .env.example with required variables (SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY). Create setup documentation.",
       "files": [
-        "src/App.tsx",
-        "src/routes.tsx",
-        "src/components/layout/Sidebar.tsx"
-      ],
-      "priority": "high"
+        "src/lib/supabase/config.ts",
+        ".env.example",
+        "docs/backend-setup.md"
+      ]
     },
     {
       "id": "13",
-      "title": "Responsive Design & Mobile Breakpoints",
-      "depends_on": ["04", "05", "06", "07", "08", "09", "10", "11"],
-      "has_ui": true,
-      "description": "Implement responsive breakpoints: Mobile (<640px) - sidebar collapses to icons only or drawer, hero height reduced, content rows 2-col grid, search overlay full screen, ratings filter drawer. Tablet (640-1024px) - sidebar 80px, hero 600px, 3-4 col grids. Desktop (>1024px) - full layout per reference. Test touch scrolling for horizontal rows. Adjust font sizes, spacing per breakpoint.",
-      "files": [
-        "tailwind.config.js",
-        "src/components/layout/Sidebar.tsx",
-        "src/components/layout/Layout.tsx",
-        "src/components/home/Hero.tsx",
-        "src/components/home/ContentRow.tsx",
-        "src/pages/SearchResults.tsx",
-        "src/pages/RatingsFilter.tsx"
+      "title": "Write integration tests for backend API",
+      "depends_on": [
+        "11"
       ],
-      "priority": "medium"
+      "has_ui": false,
+      "description": "Create test suite for all RPC functions using Supabase Test Runner or Vitest: test content retrieval with filters, test search functionality, test watch history tracking, test rating/review CRUD operations, test settings updates, test RLS policies (with edge cases), test error handling and validation. Use mock data and edge cases.",
+      "files": [
+        "tests/backend/integration/rpc.test.ts",
+        "tests/backend/integration/rls.test.ts",
+        "tests/backend/integration/storage.test.ts"
+      ]
     },
     {
       "id": "14",
-      "title": "Polish - Animations, Transitions, Accessibility",
-      "depends_on": ["12", "13"],
-      "has_ui": true,
-      "description": "Add polish: Framer Motion or CSS transitions for sidebar hover, card hover scale (1.02), overlay fade in/out, route transitions. Focus visible states for keyboard nav. ARIA labels on icon buttons. Semantic HTML (nav, main, section, button). Skip to main content link. Color contrast verification. Smooth scroll for anchor links. Loading skeletons for content rows.",
-      "files": [
-        "src/index.css",
-        "src/components/home/ContentCard.tsx",
-        "src/components/search/SearchOverlay.tsx",
-        "src/components/layout/Sidebar.tsx",
-        "src/components/layout/Layout.tsx"
+      "title": "Create migration scripts and version control",
+      "depends_on": [
+        "01",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08",
+        "10"
       ],
-      "priority": "medium"
+      "has_ui": false,
+      "description": "Bundle all SQL schema, RPC functions, RLS policies, storage setup, and realtime configuration into versioned migration files. Create migration directory structure with sequential migrations (01_initial_schema.sql, 02_add_watch_history.sql, etc.). Document migration steps in README.",
+      "files": [
+        "supabase/migrations/01_initial_schema.sql",
+        "supabase/migrations/02_storage_and_rls.sql",
+        "supabase/migrations/03_watch_history.sql",
+        "supabase/migrations/04_ratings_and_reviews.sql",
+        "supabase/migrations/05_settings.sql",
+        "supabase/migrations/06_realtime.sql",
+        "supabase/README.md"
+      ]
     },
     {
       "id": "15",
-      "title": "Build Verification & Documentation",
-      "depends_on": ["14"],
-      "has_ui": false,
-      "description": "Run build to verify no TypeScript/ESLint errors. Test all routes manually: Home hero + rows, Search overlay + results page, Ratings filter page. Verify sidebar navigation works across all pages. Document component structure in README. Create .orchestrator/design-notes.md with design decisions, color tokens, component hierarchy for future reference.",
-      "files": [
-        "README.md",
-        ".orchestrator/design-notes.md",
-        "dist/*"
+      "title": "Create backend API documentation",
+      "depends_on": [
+        "11",
+        "12"
       ],
-      "priority": "medium"
+      "has_ui": false,
+      "description": "Document all RPC functions with: function name, parameters (typed), return values, usage examples, error codes, authentication requirements. Include schema diagrams for tables and relationships. Create API reference guide for frontend developers integrating with backend.",
+      "files": [
+        "docs/api-reference.md",
+        "docs/database-schema.md"
+      ]
     }
   ]
 }

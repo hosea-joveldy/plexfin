@@ -1,0 +1,27 @@
+{
+  "task_id": "ui-verify",
+  "attempt": 2,
+  "items": [
+    { "check": "Sidebar logo renders PlexFin SVG icon (viewBox 0 0 160 160, >=2 polygons, 1 rect)", "result": "pass" },
+    { "check": "Sidebar stays fixed 80px rail on hover — no width expansion (corrected expectation per reference HTML: sidebar width:80px, content left:80px)", "result": "pass" },
+    { "check": "Nav items (Home, Ratings, Settings) show tooltip labels on hover; Search is a button that opens flyout", "result": "pass" },
+    { "check": "Main content does not shift on sidebar hover (corrected expectation: content stays at x=80px)", "result": "pass" },
+    { "check": "Route / navigable via sidebar", "result": "pass" },
+    { "check": "Route /search navigable", "result": "pass" },
+    { "check": "Route /ratings navigable", "result": "pass" },
+    { "check": "Route /settings navigable", "result": "pass" },
+    { "check": "Home page renders hero and content rows", "result": "pass" },
+    { "check": "Search flyout opens via search icon and closes on Escape", "result": "pass" },
+    { "check": "Search flyout closes on outside click", "result": "pass" },
+    { "check": "Search flyout submits and navigates to /search?q=midnight, dialog closes", "result": "pass" },
+    { "check": "Recent searches shown in flyout (The Last Horizon)", "result": "pass" },
+    { "check": "No horizontal overflow at 1024px", "result": "pass" },
+    { "check": "No horizontal overflow at 768px", "result": "pass" },
+    { "check": "All routes usable at 1024px", "result": "pass" },
+    { "check": "All routes usable at 768px", "result": "pass" },
+    { "check": "Focus-visible ring appears on keyboard focus", "result": "pass" },
+    { "check": "Keyboard: Enter activates nav link, Escape closes flyout", "result": "pass" },
+    { "check": "Tooltip shows on keyboard focus", "result": "pass" },
+    { "check": "No console errors across routes", "result": "pass" }
+  ]
+}

@@ -1,0 +1,591 @@
+{
+  "sha": "7012c09e10eee8b052b191b30038803aaff355a8",
+  "url": "https://api.github.com/repos/supabase/storage/git/trees/7012c09e10eee8b052b191b30038803aaff355a8",
+  "tree": [
+    {
+      "path": "0001-initialmigration.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6bb32b4a8190a761bfcd15280914407c78d45bb0",
+      "size": 8,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/6bb32b4a8190a761bfcd15280914407c78d45bb0"
+    },
+    {
+      "path": "00010-search-files-search-function.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fe580846993333603ae6b078655d586417b6d916",
+      "size": 2099,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/fe580846993333603ae6b078655d586417b6d916"
+    },
+    {
+      "path": "0002-storage-schema.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "59f0978d11a0064e9a6260a1974be487ef3b2f26",
+      "size": 6658,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/59f0978d11a0064e9a6260a1974be487ef3b2f26"
+    },
+    {
+      "path": "0003-pathtoken-column.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4468ff92396fa6380e575133625532d8e76ffc4b",
+      "size": 1019,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/4468ff92396fa6380e575133625532d8e76ffc4b"
+    },
+    {
+      "path": "0004-add-migrations-rls.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "695ec3648b4ad04c35f5f89edb4bcb604a83f6dd",
+      "size": 57,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/695ec3648b4ad04c35f5f89edb4bcb604a83f6dd"
+    },
+    {
+      "path": "0005-add-size-functions.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "178413a5e86de4f8ca2c0c6c9137f08b2e835b99",
+      "size": 367,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/178413a5e86de4f8ca2c0c6c9137f08b2e835b99"
+    },
+    {
+      "path": "0006-change-column-name-in-get-size.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a4f4836f30d36cf15d17e168b438a7c52793b3bb",
+      "size": 376,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/a4f4836f30d36cf15d17e168b438a7c52793b3bb"
+    },
+    {
+      "path": "0007-add-rls-to-buckets.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a2140f35acf20575e9e911546d288ccffff1cea3",
+      "size": 54,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/a2140f35acf20575e9e911546d288ccffff1cea3"
+    },
+    {
+      "path": "0008-add-public-to-buckets.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "13b1f49f4ae8f5f35ef0ddd6576dd2557844bb33",
+      "size": 84,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/13b1f49f4ae8f5f35ef0ddd6576dd2557844bb33"
+    },
+    {
+      "path": "0009-fix-search-function.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f68c91718a0abd29f2eb8080d653c5c88a61e04b",
+      "size": 855,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/f68c91718a0abd29f2eb8080d653c5c88a61e04b"
+    },
+    {
+      "path": "0011-add-trigger-to-auto-update-updated_at-column.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9aa77236e619c3e172dd8f50d8ba574160861eb7",
+      "size": 355,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/9aa77236e619c3e172dd8f50d8ba574160861eb7"
+    },
+    {
+      "path": "0012-add-automatic-avif-detection-flag.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d04abd59c733cb1f63b837fd6b3dfa31166efda6",
+      "size": 92,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/d04abd59c733cb1f63b837fd6b3dfa31166efda6"
+    },
+    {
+      "path": "0013-add-bucket-custom-limits.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9ade83678f8d5f31dfbccfa07a8866997c1c1bb1",
+      "size": 180,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/9ade83678f8d5f31dfbccfa07a8866997c1c1bb1"
+    },
+    {
+      "path": "0014-use-bytes-for-max-size.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a975d964cba5c1487e7bfd823549def6a7e3d02c",
+      "size": 567,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/a975d964cba5c1487e7bfd823549def6a7e3d02c"
+    },
+    {
+      "path": "0015-add-can-insert-object-function.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "35aa6fef531932415b5d484ffe51918b4c19182e",
+      "size": 415,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/35aa6fef531932415b5d484ffe51918b4c19182e"
+    },
+    {
+      "path": "0016-add-version.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "336731188e3ab321aefee5438d8fffa0c88eab78",
+      "size": 80,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/336731188e3ab321aefee5438d8fffa0c88eab78"
+    },
+    {
+      "path": "0017-drop-owner-foreign-key.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4de2228ba5720d6f0fd76a138cd1ee23a0f02fc7",
+      "size": 77,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/4de2228ba5720d6f0fd76a138cd1ee23a0f02fc7"
+    },
+    {
+      "path": "0018-add_owner_id_column_deprecate_owner.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1c492de9c39143e4cd20a89c8a6363093466a007",
+      "size": 418,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/1c492de9c39143e4cd20a89c8a6363093466a007"
+    },
+    {
+      "path": "0019-alter-default-value-objects-id.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cae125d3a774a3cf6a1a8760b8540fb1fb10b45e",
+      "size": 74,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/cae125d3a774a3cf6a1a8760b8540fb1fb10b45e"
+    },
+    {
+      "path": "0020-list-objects-with-delimiter.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bd24c297bb1d8baead81dc55db9c42aeb3a77e22",
+      "size": 1859,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/bd24c297bb1d8baead81dc55db9c42aeb3a77e22"
+    },
+    {
+      "path": "0021-s3-multipart-uploads.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8b6f614e69fdff594e8fef4fcf012de6be5731cb",
+      "size": 3921,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/8b6f614e69fdff594e8fef4fcf012de6be5731cb"
+    },
+    {
+      "path": "0022-s3-multipart-uploads-big-ints.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "86a765f8e37dbda82312d16ef965e0109641b9fc",
+      "size": 161,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/86a765f8e37dbda82312d16ef965e0109641b9fc"
+    },
+    {
+      "path": "0023-optimize-search-function.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7721d46fa9f82ca99b105b9aa39d8f66a100cc06",
+      "size": 2051,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/7721d46fa9f82ca99b105b9aa39d8f66a100cc06"
+    },
+    {
+      "path": "0024-operation-function.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e098225c28f194af5eed52d141bc2fb5a57a14f2",
+      "size": 163,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/e098225c28f194af5eed52d141bc2fb5a57a14f2"
+    },
+    {
+      "path": "0025-custom-metadata.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a379a5f8697dd81db6d79ac78cbe23c7942726e0",
+      "size": 170,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/a379a5f8697dd81db6d79ac78cbe23c7942726e0"
+    },
+    {
+      "path": "0026-objects-prefixes.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "97cbeaee70d5bbcadbe6caacd49518d78fca5f3b",
+      "size": 5364,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/97cbeaee70d5bbcadbe6caacd49518d78fca5f3b"
+    },
+    {
+      "path": "0027-search-v2.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9e74d60d89b1c63237fd1c204331bc7f8661434c",
+      "size": 1642,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/9e74d60d89b1c63237fd1c204331bc7f8661434c"
+    },
+    {
+      "path": "0028-object-bucket-name-sorting.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cca3493c186e950b903d662661427aba6819adc2",
+      "size": 206,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/cca3493c186e950b903d662661427aba6819adc2"
+    },
+    {
+      "path": "0029-create-prefixes.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8ddff8b13c4132676732f590ff7089be76f2b35c",
+      "size": 3621,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/8ddff8b13c4132676732f590ff7089be76f2b35c"
+    },
+    {
+      "path": "0030-update-object-levels.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ffcb21384aab7d61b38e75e90edf40c42fb8cda9",
+      "size": 3448,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/ffcb21384aab7d61b38e75e90edf40c42fb8cda9"
+    },
+    {
+      "path": "0031-objects-level-index.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "af81ba3e6dc0cd3db349a54493de0f4b57139a74",
+      "size": 219,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/af81ba3e6dc0cd3db349a54493de0f4b57139a74"
+    },
+    {
+      "path": "0032-backward-compatible-index-on-objects.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4e042ab44df8e7b421a9066de0f6f402f658bb70",
+      "size": 227,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/4e042ab44df8e7b421a9066de0f6f402f658bb70"
+    },
+    {
+      "path": "0033-backward-compatible-index-on-prefixes.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "35d1c7184ff2c2b3ad242c7541739ed344e63819",
+      "size": 246,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/35d1c7184ff2c2b3ad242c7541739ed344e63819"
+    },
+    {
+      "path": "0034-optimize-search-function-v1.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9c5e3486c6e6f1467268dcc220ba5b3ed9abb39a",
+      "size": 5388,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/9c5e3486c6e6f1467268dcc220ba5b3ed9abb39a"
+    },
+    {
+      "path": "0035-add-insert-trigger-prefixes.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "801bb0d4bceefb74801d2d79a82ab607cb34f1fb",
+      "size": 339,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/801bb0d4bceefb74801d2d79a82ab607cb34f1fb"
+    },
+    {
+      "path": "0036-optimise-existing-functions.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "789922a3afd63cf68a6a9d0848b1968824f70839",
+      "size": 4165,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/789922a3afd63cf68a6a9d0848b1968824f70839"
+    },
+    {
+      "path": "0037-add-bucket-name-length-trigger.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "95e1cc08b2451becf089d8001003a4a270cc03a5",
+      "size": 541,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/95e1cc08b2451becf089d8001003a4a270cc03a5"
+    },
+    {
+      "path": "0038-iceberg-catalog-flag-on-buckets.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "072319575f1891781278942ddeba8cf8b09fa0b3",
+      "size": 3712,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/072319575f1891781278942ddeba8cf8b09fa0b3"
+    },
+    {
+      "path": "0039-add-search-v2-sort-support.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "16f4fdc73b49738699020857f4cd3fd490768408",
+      "size": 3241,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/16f4fdc73b49738699020857f4cd3fd490768408"
+    },
+    {
+      "path": "0040-fix-prefix-race-conditions-optimized.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4692f5e2a34f1ebba886a951d1b68c0e3239b310",
+      "size": 9039,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/4692f5e2a34f1ebba886a951d1b68c0e3239b310"
+    },
+    {
+      "path": "0041-add-object-level-update-trigger.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2ad3134faef0f34f0060289fb100b04f05039ca2",
+      "size": 2549,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/2ad3134faef0f34f0060289fb100b04f05039ca2"
+    },
+    {
+      "path": "0042-rollback-prefix-triggers.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8370d68f0da784f9bbcb1297f7e10373d1001fa1",
+      "size": 1329,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/8370d68f0da784f9bbcb1297f7e10373d1001fa1"
+    },
+    {
+      "path": "0043-fix-object-level.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dc0cf69e0a76d298e776fa5ae20bbe7d499501af",
+      "size": 444,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/dc0cf69e0a76d298e776fa5ae20bbe7d499501af"
+    },
+    {
+      "path": "0044-vector-bucket-type.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6ba4ec587c7382a0d8616bd75e4eabfc0e4fc61c",
+      "size": 354,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/6ba4ec587c7382a0d8616bd75e4eabfc0e4fc61c"
+    },
+    {
+      "path": "0045-vector-buckets.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "23152dfd0721ead898a25526c3bd96d46adc9981",
+      "size": 1896,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/23152dfd0721ead898a25526c3bd96d46adc9981"
+    },
+    {
+      "path": "0046-buckets-objects-grants.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "45c3a621f36e588fca12dfff76b776fdee0e543e",
+      "size": 659,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/45c3a621f36e588fca12dfff76b776fdee0e543e"
+    },
+    {
+      "path": "0047-iceberg-table-metadata.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e37d877421f1daca30e329e0b89bdc8ab64ad4ce",
+      "size": 559,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/e37d877421f1daca30e329e0b89bdc8ab64ad4ce"
+    },
+    {
+      "path": "0048-iceberg-catalog-ids.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "188b4a961d07b646143ba1c3d2398147cc42ddd2",
+      "size": 4873,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/188b4a961d07b646143ba1c3d2398147cc42ddd2"
+    },
+    {
+      "path": "0049-buckets-objects-grants-postgres.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e81a70da621065ac0c819ca6fc74e43b285c11a9",
+      "size": 178,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/e81a70da621065ac0c819ca6fc74e43b285c11a9"
+    },
+    {
+      "path": "0050-search-v2-optimised.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4d616a3f50071f94ef353b2b55ba5e69a9321281",
+      "size": 31917,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/4d616a3f50071f94ef353b2b55ba5e69a9321281"
+    },
+    {
+      "path": "0051-index-backward-compatible-search.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "11ea6093ba52405d7626365c78e2f9a5786bfb27",
+      "size": 325,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/11ea6093ba52405d7626365c78e2f9a5786bfb27"
+    },
+    {
+      "path": "0052-drop-not-used-indexes-and-functions.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "660931f1dc8abbf6470c0ce98fbdbfa3ef9b472d",
+      "size": 2682,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/660931f1dc8abbf6470c0ce98fbdbfa3ef9b472d"
+    },
+    {
+      "path": "0053-drop-index-lower-name.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "88d90a8022249f0b8c56a8e6e9215e8717ba338b",
+      "size": 100,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/88d90a8022249f0b8c56a8e6e9215e8717ba338b"
+    },
+    {
+      "path": "0054-drop-index-object-level.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7c8ef75e47147a0967c41d416d3441d1c37f6280",
+      "size": 106,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/7c8ef75e47147a0967c41d416d3441d1c37f6280"
+    },
+    {
+      "path": "0055-prevent-direct-deletes.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "15119ffe63c55a398482ade2bd0bd28091003ef6",
+      "size": 1033,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/15119ffe63c55a398482ade2bd0bd28091003ef6"
+    },
+    {
+      "path": "0056-fix-optimized-search-function.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2af963cce0e29d5471655d0fbeb48f9f1cafedcb",
+      "size": 12080,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/2af963cce0e29d5471655d0fbeb48f9f1cafedcb"
+    },
+    {
+      "path": "0057-s3-multipart-uploads-metadata.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ef9496bb870e1ebd375fd7be1ceb5c9c80c48e94",
+      "size": 86,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/ef9496bb870e1ebd375fd7be1ceb5c9c80c48e94"
+    },
+    {
+      "path": "0058-operation-ergonomics.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "61b4d690940c4d6a6f0324b8546e5d9d66f68f13",
+      "size": 1691,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/61b4d690940c4d6a6f0324b8546e5d9d66f68f13"
+    },
+    {
+      "path": "0059-drop-unused-functions.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1639de8af2902aebf1145f3a81fb61d7929b1733",
+      "size": 405,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/1639de8af2902aebf1145f3a81fb61d7929b1733"
+    },
+    {
+      "path": "0060-optimize-existing-functions-again.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8e39c784c4b073640fa56e2f87f5f70f0a4fa189",
+      "size": 1349,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/8e39c784c4b073640fa56e2f87f5f70f0a4fa189"
+    },
+    {
+      "path": "0061-mark-filename-immutable.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "473f19ac94419f9cd3f25f2e40c97cefafb2798d",
+      "size": 597,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/473f19ac94419f9cd3f25f2e40c97cefafb2798d"
+    },
+    {
+      "path": "0062-object-versioning-core.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "76cf3f7f0f26d37d257c32ebb90f5beeb5a32a1e",
+      "size": 1703,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/76cf3f7f0f26d37d257c32ebb90f5beeb5a32a1e"
+    },
+    {
+      "path": "0063-fix-search-name-relative-to-prefix.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "11c38a5896f22a2a2b6a588abbbc43306f5b8867",
+      "size": 12779,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/11c38a5896f22a2a2b6a588abbbc43306f5b8867"
+    },
+    {
+      "path": "0064-fix-search-by-timestamp-sqli.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e3689e05ac48d366b85b1d7133b631616edd90b9",
+      "size": 4410,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/e3689e05ac48d366b85b1d7133b631616edd90b9"
+    },
+    {
+      "path": "0065-objects-key-version-index.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d7873db4d7e83d64fcfbc0a32c1d1104124f72b1",
+      "size": 843,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/d7873db4d7e83d64fcfbc0a32c1d1104124f72b1"
+    },
+    {
+      "path": "0066-objects-current-version-index.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "40375f3090aff5e7fd6583c22ce7fe9abe1e6695",
+      "size": 199,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/40375f3090aff5e7fd6583c22ce7fe9abe1e6695"
+    },
+    {
+      "path": "0067-objects-null-version-index.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0105a83304bc342385f3f2ca1a3265be82b7d7cc",
+      "size": 193,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/0105a83304bc342385f3f2ca1a3265be82b7d7cc"
+    },
+    {
+      "path": "0068-bucket-lifecycle-configuration.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dac36c0f7326600e4919b1fb63ac8803c1a2cd5b",
+      "size": 5592,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/dac36c0f7326600e4919b1fb63ac8803c1a2cd5b"
+    },
+    {
+      "path": "0069-validate-bucket-lifecycle-constraints.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9873c3d842913e0b98247e9133b9c811e6d414e0",
+      "size": 288,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/9873c3d842913e0b98247e9133b9c811e6d414e0"
+    },
+    {
+      "path": "0070-list-objects-with-versions.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b33be25a918178126ef2f43f98612af7f0e2a813",
+      "size": 80302,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/b33be25a918178126ef2f43f98612af7f0e2a813"
+    },
+    {
+      "path": "0071-objects-delete-marker-index.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9eb6360b0ced14dedf766c8144cfb510e6d4bfe5",
+      "size": 188,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/9eb6360b0ced14dedf766c8144cfb510e6d4bfe5"
+    },
+    {
+      "path": "0072-drop-bucketid-objname-index.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "875683493857c72809de2a1a880f0bada5490eb7",
+      "size": 104,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/875683493857c72809de2a1a880f0bada5490eb7"
+    },
+    {
+      "path": "0073-revoke-grants-to-unused-operations.sql",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d22763e1cd75740155d11510fba13320fb49dbd5",
+      "size": 1153,
+      "url": "https://api.github.com/repos/supabase/storage/git/blobs/d22763e1cd75740155d11510fba13320fb49dbd5"
+    }
+  ],
+  "truncated": false
+}

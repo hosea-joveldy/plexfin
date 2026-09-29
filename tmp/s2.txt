@@ -1,0 +1,139 @@
+  code text not null unique,
+  name text not null unique,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists languages_code_idx on public.languages (code);
+
+create table if not exists public.content_languages (
+  content_id uuid not null references public.content (id) on delete cascade,
+  language_id uuid not null references public.languages (id) on delete cascade,
+  is_primary boolean not null default false,
+  primary key (content_id, language_id)
+);
+
+create index if not exists content_languages_language_id_idx on public.content_languages (language_id);
+
+-- -----------------------------------------------------------------------------
+-- ratings — one star rating per user per content item
+-- -----------------------------------------------------------------------------
+create table if not exists public.ratings (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references public.users (id) on delete cascade,
+  content_id uuid not null references public.content (id) on delete cascade,
+  rating smallint not null check (rating between 1 and 5),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (user_id, content_id)
+);
+
+create index if not exists ratings_content_id_idx on public.ratings (content_id);
+create index if not exists ratings_user_id_idx on public.ratings (user_id);
+
+create trigger ratings_set_updated_at
+  before update on public.ratings
+  for each row execute function public.set_updated_at();
+
+-- -----------------------------------------------------------------------------
+-- content_ratings — aggregate view of user ratings per content item
+-- -----------------------------------------------------------------------------
+create table if not exists public.content_ratings (
+  content_id uuid primary key references public.content (id) on delete cascade,
+  average_rating numeric(3, 2) not null default 0 check (average_rating between 0 and 5),
+  rating_count integer not null default 0 check (rating_count >= 0),
+  -- Denormalised counters kept for fast "trending" style sorting
+  five_star_count integer not null default 0 check (five_star_count >= 0),
+  four_star_count integer not null default 0 check (four_star_count >= 0),
+  three_star_count integer not null default 0 check (three_star_count >= 0),
+  two_star_count integer not null default 0 check (two_star_count >= 0),
+  one_star_count integer not null default 0 check (one_star_count >= 0),
+  updated_at timestamptz not null default now()
+);
+
+comment on table public.content_ratings is
+  'Per-content aggregate of user ratings, recalculated by RPC get_content_ratings.';
+
+create index if not exists content_ratings_average_rating_idx
+  on public.content_ratings (average_rating desc);
+
+create trigger content_ratings_set_updated_at
+  before update on public.content_ratings
+  for each row execute function public.set_updated_at();
+
+-- -----------------------------------------------------------------------------
+-- watch_history — playback progress per user per content item
+-- -----------------------------------------------------------------------------
+create table if not exists public.watch_history (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references public.users (id) on delete cascade,
+  content_id uuid not null references public.content (id) on delete cascade,
+  progress_percent numeric(5, 2) not null default 0
+    check (progress_percent between 0 and 100),
+  position_seconds integer not null default 0 check (position_seconds >= 0),
+  completed boolean not null default false,
+  watch_count integer not null default 0 check (watch_count >= 0),
+  first_watched_at timestamptz not null default now(),
+  last_watched_at timestamptz not null default now(),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (user_id, content_id)
+);
+
+create index if not exists watch_history_content_id_idx on public.watch_history (content_id);
+create index if not exists watch_history_user_id_idx on public.watch_history (user_id);
+create index if not exists watch_history_user_id_last_watched_at_idx
+  on public.watch_history (user_id, last_watched_at desc);
+create index if not exists watch_history_user_id_completed_idx
+  on public.watch_history (user_id, completed);
+
+create trigger watch_history_set_updated_at
+  before update on public.watch_history
+  for each row execute function public.set_updated_at();
+
+-- -----------------------------------------------------------------------------
+-- reviews — one written review per user per content item
+-- -----------------------------------------------------------------------------
+create table if not exists public.reviews (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references public.users (id) on delete cascade,
+  content_id uuid not null references public.content (id) on delete cascade,
+  rating smallint check (rating is null or rating between 1 and 5),
+  title text,
+  body text not null,
+  is_spoiler boolean not null default false,
+  helpful_count integer not null default 0 check (helpful_count >= 0),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (user_id, content_id)
+);
+
+create index if not exists reviews_content_id_idx on public.reviews (content_id);
+create index if not exists reviews_user_id_idx on public.reviews (user_id);
+create index if not exists reviews_content_id_created_at_idx
+  on public.reviews (content_id, created_at desc);
+
+create trigger reviews_set_updated_at
+  before update on public.reviews
+  for each row execute function public.set_updated_at();
+
+-- -----------------------------------------------------------------------------
+-- settings — one row per user, created alongside the account
+-- -----------------------------------------------------------------------------
+create table if not exists public.settings (
+  user_id uuid primary key references public.users (id) on delete cascade,
+  email_notifications boolean not null default true,
+  push_notifications boolean not null default true,
+  auto_play_next boolean not null default true,
+  show_profile_to_others boolean not null default false,
+  preferred_language text not null default 'en',
+  playback_quality text not null default 'auto'
+    check (playback_quality in ('auto', 'low', 'medium', 'high')),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists settings_preferred_language_idx on public.settings (preferred_language);
+
+create trigger settings_set_updated_at
+  before update on public.settings
+  for each row execute function public.set_updated_at();

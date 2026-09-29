@@ -5,14 +5,15 @@ import MainContent from "./MainContent";
 import SearchFlyout from "./SearchFlyout";
 
 /**
- * App shell: fixed 80px sidebar at the left, scrollable content to
- * the right of it. The search flyout mounts at the layout level so it
- * overlays page content without being clipped by any parent's
- * overflow rules.
+ * App shell: fixed sidebar rail (80px, expanding to 240px on hover)
+ * at the left, scrollable content to the right of it. The search
+ * flyout mounts at the layout level so it overlays page content
+ * without being clipped by any parent's overflow rules.
  */
 export default function Layout() {
   const location = useLocation();
   const [isSearchOpen, setSearchOpen] = useState(false);
+  const [isSidebarExpanded, setSidebarExpanded] = useState(false);
 
   // Close the flyout whenever navigation happens.
   useEffect(() => {
@@ -28,11 +29,15 @@ export default function Layout() {
         Skip to main content
       </a>
 
-      <Sidebar isSearchOpen={isSearchOpen} onSearchOpenChange={setSearchOpen} />
+      <Sidebar
+        isSearchOpen={isSearchOpen}
+        onSearchOpenChange={setSearchOpen}
+        onHoverChange={setSidebarExpanded}
+      />
 
       <SearchFlyout isOpen={isSearchOpen} onClose={() => setSearchOpen(false)} />
 
-      <MainContent>
+      <MainContent sidebarExpanded={isSidebarExpanded}>
         <Outlet />
       </MainContent>
     </div>

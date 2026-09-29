@@ -1,0 +1,58 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - `__dirname` (vitest.config.ts:14:25). Use `import.meta.dirname` instead
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.0.2 /home/opencode/projects/plexfin
+
+ ✓ src/test/theme.test.ts > dark theme colors > sets background to #141414 8ms
+ ✓ src/test/theme.test.ts > dark theme colors > sets sidebar to #0d0d0d 1ms
+ ✓ src/test/theme.test.ts > dark theme colors > defines an amber brand accent (#e8a940) from the logo 1ms
+ ✓ src/test/theme.test.ts > dark theme colors > maps sidebar and brand colors into the Tailwind config 1ms
+ ✓ src/test/theme.test.ts > dark theme colors > defines text tiers matching the references (#fff / #ccc / #999) 2ms
+ ✓ src/test/theme.test.ts > typography scale (from reference HTML) > matches the reference font sizes 5ms
+ ✓ src/test/theme.test.ts > typography scale (from reference HTML) > uses medium (500) weight for hero titles and regular (400) for section titles 1ms
+ ✓ src/test/theme.test.ts > custom utilities > provides gradient background utilities 1ms
+ ✓ src/test/theme.test.ts > custom utilities > styles the scrollbar via a scrollbar utility 1ms
+ ✓ src/test/theme.test.ts > css variables sanity > applies the dark theme by default on html 1ms
+ ✓ src/test/theme.test.ts > css variables sanity > keeps :root and .dark in sync for the dark-only design 4ms
+ ✓ src/data/data.test.ts > mock-hero > exports a featured hero item 9ms
+ ✓ src/data/data.test.ts > mock-rows > exports rows for all required categories in order 5ms
+ ✓ src/data/data.test.ts > mock-rows > each row has at least 5 valid items 20ms
+ ✓ src/data/data.test.ts > mock-rows > continue watching items carry watch progress 2ms
+ ✓ src/data/data.test.ts > mock-rows > row items match their category genre (except Continue Watching) 7ms
+ ✓ src/data/data.test.ts > mock-search > exports a pool of valid search results 15ms
+ ✓ src/data/data.test.ts > mock-ratings > exports standard rating options with labels 3ms
+ ✓ src/lib/utils.test.ts > cn utility > merges class names 37ms
+ ✓ src/lib/utils.test.ts > cn utility > resolves tailwind class conflicts, last one wins 1ms
+ ✓ src/lib/utils.test.ts > cn utility > drops falsy values 1ms
+ ✓ src/lib/utils.test.ts > cn utility > accepts conditional objects 1ms
+ ✓ tests/backend/schema.test.ts > supabase/schema.sql > is syntactically valid PostgreSQL 36ms
+ ✓ tests/backend/schema.test.ts > supabase/schema.sql > defines all 11 required tables 2ms
+ ✓ tests/backend/schema.test.ts > supabase/schema.sql > uses UUID primary keys on all entity tables 4ms
+ ✓ tests/backend/schema.test.ts > supabase/schema.sql > generates UUIDs in the database via gen_random_uuid() 4ms
+ ✓ tests/backend/schema.test.ts > supabase/schema.sql > links users, profiles, and settings to auth.users 2ms
+ ✓ tests/backend/schema.test.ts > supabase/schema.sql > enforces one rating/review/watch entry per user per content item 4ms
+ ✓ tests/backend/schema.test.ts > supabase/schema.sql > joins content to genres through content_genres with a composite key 1ms
+ ✓ tests/backend/schema.test.ts > supabase/schema.sql > keeps content columns aligned with the frontend ContentItem shape 2ms
+ ✓ tests/backend/schema.test.ts > supabase/schema.sql > indexes foreign keys and common lookup columns 1ms
+ ✓ tests/backend/schema.test.ts > supabase/schema.sql > covers every foreign key column with an index 2ms
+ ✓ tests/backend/schema.test.ts > supabase/schema.sql > auto-updates updated_at via triggers 1ms
+ ✓ tests/backend/schema.test.ts > supabase/schema.sql > validates rating values between 1 and 5 and progress between 0 and 100 1ms
+ ✓ tests/backend/schema.test.ts > supabase/schema.sql > enables row level security hooks for later policy work 0ms
+ ✓ src/App.test.tsx > App router > renders the home route 335ms
+ ✓ src/components/layout/Sidebar.test.tsx > Sidebar expanding rail behavior > collapses to 80px by default 393ms
+ ✓ src/components/layout/Sidebar.test.tsx > Sidebar expanding rail behavior > expands to 240px on hover and collapses on mouse leave 88ms
+ ✓ src/components/layout/Sidebar.test.tsx > Sidebar expanding rail behavior > stays collapsed while the search flyout is open 39ms
+ ✓ src/components/layout/Sidebar.test.tsx > Sidebar expanding rail behavior > reports hover state changes so main content can shift in sync 65ms
+ ✓ src/components/layout/Sidebar.test.tsx > Sidebar expanding rail behavior > renders inline labels for Home, Search, Ratings and Settings 32ms
+ ✓ src/components/layout/Sidebar.test.tsx > Sidebar expanding rail behavior > reveals all labels when the rail is expanded, hides them when collapsed 34ms
+ ✓ src/components/layout/Sidebar.test.tsx > Sidebar expanding rail behavior > keeps accessible names on links and buttons regardless of expansion 54ms
+ ✓ src/components/layout/Sidebar.test.tsx > Sidebar expanding rail behavior > marks the active route with aria-current 31ms
+ ✓ src/components/layout/Sidebar.test.tsx > MainContent shift behavior > sits 80px from the left by default 8ms
+ ✓ src/components/layout/Sidebar.test.tsx > MainContent shift behavior > shifts to 240px when the sidebar is hover-expanded 7ms
+
+ Test Files  6 passed (6)
+      Tests  46 passed (46)
+   Start at  06:55:57
+   Duration  3.73s (environment 65%, setup 10%, tests 9%, import 8%, transform 7%, worker 1%)
+

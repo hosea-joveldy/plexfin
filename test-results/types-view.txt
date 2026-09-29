@@ -1,0 +1,48 @@
+1 | /**
+2 |  * Shared types for the mock content layer.
+3 |  * These describe every piece of catalog content shown in the UI
+4 |  * (hero, rows, search results) until a real backend exists.
+5 |  */
+6 | 
+7 | /** A film or show in the catalog. */
+8 | export interface ContentItem {
+9 |   /** Stable unique identifier, e.g. "the-last-lighthouse". */
+10 |   id: string
+11 |   title: string
+12 |   description: string
+13 |   /** One-line tagline, shown in the hero section. */
+14 |   logline?: string
+15 |   /** Portrait (2:3) card image. */
+16 |   thumbnailUrl: string
+17 |   /** Landscape backdrop used for the hero and wide cards. */
+18 |   backdropUrl: string
+19 |   /** Release year. */
+20 |   year: number
+21 |   /** Content age rating, e.g. "PG-13". */
+22 |   rating: string
+23 |   genres: string[]
+24 |   /** Runtime in minutes. */
+25 |   durationMinutes: number
+26 |   /** Star rating out of 5, used by the ratings filter page. */
+27 |   stars?: number
+28 |   /** Optional watch progress (0–100), set only for in-progress items. */
+29 |   progressPercent?: number
+30 | }
+31 | 
+32 | /** A horizontally scrollable row of content on the home page. */
+33 | export interface ContentRow {
+34 |   id: string
+35 |   title: string
+36 |   items: ContentItem[]
+37 | }
+38 | 
+39 | /** An entry in the ratings filter accordion. */
+40 | export interface RatingOption {
+41 |   /** Rating code, e.g. "PG-13". */
+42 |   value: string
+43 |   /** Display label, e.g. "PG-13 — Parents Strongly Cautioned". */
+44 |   label: string
+45 |   /** Short explanation of what the rating means. */
+46 |   description: string
+47 | }
+48 | 

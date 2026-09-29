@@ -1,0 +1,208 @@
+import { describe, expect, it, beforeAll } from "vitest"
+import { readFileSync } from "node:fs"
+import { resolve } from "node:path"
+import pgsql from "pgsql-parser"
+
+/**
+ * Validation of the RPC/API layer defined in supabase/schema.sql:
+ * the `content_items` view and the SQL functions that back the frontend's
+ * data needs (hero, rows, item detail, continue-watching, ratings filter).
+ *
+ * No live Postgres is available in this environment, so like schema.test.ts
+ * we parse the DDL and assert on the resulting AST, plus deparse and
+ * re-parse each definition to prove it is well-formed in isolation.
+ */
+
+const schema = readFileSync(resolve(__dirname, "../../supabase/schema.sql"), "utf8")
+
+type AnyStmt = { stmt: Record<string, any> }
+
+let statements: AnyStmt[] = []
+let views: Record<string, any> = {}
+let functions: Record<string, any> = {}
+
+beforeAll(async () => {
+  await pgsql.loadModule()
+  const ast = pgsql.parseSync(schema)
+  statements = ast.stmts
+  views = {}
+  functions = {}
+  for (const { stmt } of statements) {
+    if (stmt.ViewStmt) {
+      views[stmt.ViewStmt.view.relname] = stmt.ViewStmt
+    } else if (stmt.CreateFunctionStmt) {
+      const f = stmt.CreateFunctionStmt
+      const name = f.funcname.map((n: any) => n.String.sval).join(".")
+      functions[name] = f
+    }
+  }
+})
+
+/** Deparse a statement and re-parse the result — proves the definition is self-contained. */
+function roundTrip(stmt: any) {
+  const deparsed = pgsql.deparseSync(stmt)
+  const reparsed = pgsql.parseSync(deparsed)
+  expect(reparsed.stmts).toHaveLength(1)
+  return { deparsed, reparsed: reparsed.stmts[0].stmt }
+}
+
+function params(f: any): Array<{ name: string; types: string[]; hasDefault: boolean }> {
+  return (f.parameters ?? []).map((p: any) => ({
+    name: p.FunctionParameter.name,
+    types: p.FunctionParameter.argType.names.map((n: any) => n.String.sval).filter(Boolean),
+    hasDefault: !!p.FunctionParameter.defexpr,
+  }))
+}
+
+function option(f: any, defname: string): string | undefined {
+  const found = (f.options ?? []).find((o: any) => o.DefElem?.defname === defname)
+  return found?.DefElem?.arg?.String?.sval
+}
+
+const VIEWS = ["content_items"]
+const FUNCTIONS = [
+  "content_item_json",
+  "get_featured_hero",
+  "get_rows",
+  "get_content_by_id",
+  "get_continue_watching",
+  "get_search_results",
+  "get_ratings_filter_data",
+] as const
+
+describe("supabase/schema.sql — content_items view", () => {
+  it("defines the content_items view with security_invoker", () => {
+    const v = views.content_items
+    expect(v, "create view content_items exists").toBeTruthy()
+    const opts = v.options ?? []
+    const invoker = opts.find((o: any) => o.DefElem?.defname === "security_invoker")
+    expect(invoker, "view is created with security_invoker = true").toBeTruthy()
+    expect(invoker!.DefElem.arg.String.sval).toBe("true")
+  })
+
+  it("selects from content joined to ratings through content_ratings, not a direct FK", () => {
+    const v = views.content_items
+    const { deparsed } = roundTrip(v)
+    // The join path is content -> content_ratings -> ratings
+    expect(deparsed).toMatch(/content_ratings/)
+    expect(deparsed).toMatch(/ratings/)
+  })
+
+  it("exposes only published content", () => {
+    const { deparsed } = roundTrip(views.content_items)
+    expect(deparsed).toMatch(/status\s*=\s*'published'/)
+  })
+
+  it("carries the columns the frontend ContentItem shape needs", () => {
+    const { deparsed } = roundTrip(views.content_items)
+    for (const col of ["slug", "title", "description", "release_year", "rating_code", "poster_url"]) {
+      expect(deparsed, `view exposes ${col}`).toMatch(new RegExp(`\\b${col}\\b`))
+    }
+  })
+})
+
+describe("supabase/schema.sql — RPC functions", () => {
+  it("defines all 7 required functions", () => {
+    for (const name of FUNCTIONS) {
+      expect(functions[`public.${name}`], `create function public.${name} exists`).toBeTruthy()
+    }
+  })
+
+  it("all functions are language sql and stable, replaceable (create or replace)", () => {
+    for (const name of FUNCTIONS) {
+      const f = functions[`public.${name}`]
+      expect(f.replace, `${name} uses create or replace`).toBe(true)
+      expect(option(f, "language"), `${name} is language sql`).toBe("sql")
+      expect(option(f, "volatility"), `${name} is stable`).toBe("s")
+    }
+  })
+
+  it("content_item_json takes a content_items row and optional numeric progress", () => {
+    const f = functions["public.content_item_json"]
+    const ps = params(f)
+    expect(ps).toHaveLength(2)
+    expect(ps[0].name).toBe("item")
+    expect(ps[0].types).toEqual(["pg_catalog", "content_items"])
+    expect(ps[1].name).toBe("p_progress")
+    expect(ps[1].types).toEqual(["pg_catalog", "numeric"])
+    expect(ps[1].hasDefault).toBe(true)
+  })
+
+  it("content_item_json never emits null object members (jsonb_strip_nulls)", () => {
+    const f = functions["public.content_item_json"]
+    const { deparsed } = roundTrip(f)
+    expect(deparsed).toMatch(/jsonb_strip_nulls/)
+  })
+
+  it("get_featured_hero and get_content_by_id take no parameters", () => {
+    for (const name of ["get_featured_hero", "get_content_by_id"]) {
+      const f = functions[`public.${name}`]
+      expect(f.parameters ?? [], `${name} has no parameters`).toHaveLength(0)
+    }
+  })
+
+  it("get_rows filters by content type and row slug", () => {
+    const f = functions["public.get_rows"]
+    const ps = params(f)
+    expect(ps.map((p) => p.name)).toEqual(["p_type", "p_slug"])
+    expect(ps[0].types).toEqual(["pg_catalog", "text"])
+    expect(ps[1].types).toEqual(["pg_catalog", "text"])
+  })
+
+  it("get_continue_watching defaults the user to auth.uid() and caps the limit at 50", () => {
+    const f = functions["public.get_continue_watching"]
+    const ps = params(f)
+    expect(ps.map((p) => p.name)).toEqual(["p_user_id", "p_limit"])
+    expect(ps[0].types).toEqual(["pg_catalog", "uuid"])
+    expect(ps[0].hasDefault).toBe(true)
+    // default expr calls auth.uid()
+    const def = f.parameters[0].FunctionParameter.defexpr
+    const deparsedDef = pgsql.deparseSync(def)
+    expect(deparsedDef).toMatch(/auth\.uid\(\)/)
+    // the body caps p_limit at 50
+    const { deparsed } = roundTrip(f)
+    expect(deparsed).toMatch(/least\s*\(\s*greatest\s*\(\s*p_limit/i)
+  })
+
+  it("get_search_results takes a search text and limits results", () => {
+    const f = functions["public.get_search_results"]
+    const ps = params(f)
+    expect(ps.map((p) => p.name)).toEqual(["p_query", "p_limit"])
+    expect(ps[0].types).toEqual(["pg_catalog", "text"])
+    expect(ps[1].types).toEqual(["pg_catalog", "int4"])
+    expect(ps[1].hasDefault).toBe(true)
+  })
+
+  it("get_ratings_filter_data mirrors the ratings page filter state", () => {
+    const f = functions["public.get_ratings_filter_data"]
+    const ps = params(f)
+    const names = ps.map((p) => p.name)
+    expect(names).toEqual([
+      "p_genres",
+      "p_rating_min",
+      "p_rating_max",
+      "p_year_min",
+      "p_year_max",
+      "p_duration_min",
+      "p_duration_max",
+      "p_languages",
+    ])
+    expect(ps[0].types).toEqual(["pg_catalog", "text[]"])
+    expect(ps[1].types).toEqual(["pg_catalog", "numeric"])
+    expect(ps[1].hasDefault).toBe(true)
+    expect(ps[2].types).toEqual(["pg_catalog", "numeric"])
+    expect(ps[3].types).toEqual(["pg_catalog", "int4"])
+    expect(ps[4].types).toEqual(["pg_catalog", "int4"])
+    expect(ps[5].types).toEqual(["pg_catalog", "int4"])
+    expect(ps[6].types).toEqual(["pg_catalog", "int4"])
+    expect(ps[7].types).toEqual(["pg_catalog", "text[]"])
+  })
+
+  it("every function body round-trips through deparse + reparse", () => {
+    for (const name of FUNCTIONS) {
+      const f = functions[`public.${name}`]
+      const { deparsed } = roundTrip(f)
+      expect(deparsed.length, `${name} body is non-empty`).toBeGreaterThan(0)
+    }
+  })
+})
