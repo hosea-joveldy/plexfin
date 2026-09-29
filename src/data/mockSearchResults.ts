@@ -7,6 +7,7 @@ export interface SearchResultItem {
   duration: string;
   thumbnail: string;
   type: "movie" | "show";
+  stars?: number;
 }
 
 export const mockSearchResults = [

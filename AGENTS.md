@@ -10,7 +10,7 @@ PlexFin is a streaming catalog UI built with React, TypeScript, Tailwind CSS, an
 
 ## Backend status
 
-- The app must remain usable without Supabase credentials; in that case use mock catalog data.
+- The app must remain usable without Supabase credentials; in that case use mock catalog data and session-only local playback.
 - Browser credentials are `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`.
 - Supabase schema/setup scripts live in `supabase/`. Keep SQL function arguments, return types, table columns, RLS policies, and TypeScript RPC calls aligned.
 - Local movie playback is available from the title detail page. Put supplied movies in `public/movies/<id>.mp4` and posters in `public/posters/<id>.jpg`; users can also choose a video file for session-only playback. Do not source media.

@@ -10,6 +10,7 @@ export interface ContentItem {
   id: string
   title: string
   description: string
+  contentType?: "movie" | "series" | "short"
   /** One-line tagline, shown in the hero section. */
   logline?: string
   /** Portrait (2:3) card image. */

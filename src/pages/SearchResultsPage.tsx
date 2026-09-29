@@ -1,10 +1,12 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import SearchInput from "@/components/search/SearchInput";
 import SearchResultsGrid from "@/components/search/SearchResultsGrid";
 import SearchFilters from "@/components/search/SearchFilters";
 import SearchEmptyState from "@/components/search/SearchEmptyState";
-import { mockSearchResults } from "@/data/mockSearchResults";
+import { mockSearchResults, type SearchResultItem } from "@/data/mockSearchResults";
+import { useSupabase } from "@/hooks/useSupabase";
+import type { ContentItem } from "@/data/types";
 
 type TypeFilter = "all" | "movies" | "shows";
 type SortOption = "relevance" | "rating" | "date" | "az";
@@ -28,20 +30,48 @@ export default function SearchResultsPage() {
 
   const [activeFilter, setActiveFilter] = useState<TypeFilter>("all");
   const [sortBy, setSortBy] = useState<SortOption>("relevance");
+  const supabase = useSupabase();
+  const [remoteResults, setRemoteResults] = useState<SearchResultItem[] | null>(null);
+  const [remoteLoading, setRemoteLoading] = useState(false);
+
+  useEffect(() => {
+    if (!supabase) { setRemoteResults(null); return; }
+    let cancelled = false;
+    setRemoteLoading(true);
+    void (async () => {
+      try {
+        const response = query.trim()
+          ? await supabase.rpc("search_content", { p_query: query.trim(), p_page: 1, p_page_size: 100 })
+          : await supabase.rpc("get_content_list", { p_page: 1, p_page_size: 100 });
+        if (cancelled) return;
+        if (response.error) { setRemoteResults(null); return; }
+        const items = (response.data ?? []) as ContentItem[];
+        if (!query.trim() && items.length === 0) { setRemoteResults(null); return; }
+        setRemoteResults(items.map((item) => ({
+          id: item.id, title: item.title, year: item.year, rating: item.rating,
+          genre: item.genres?.[0] ?? "", duration: item.durationMinutes ? `${item.durationMinutes} min` : "",
+          thumbnail: !item.thumbnailUrl ? `/posters/${encodeURIComponent(item.id)}.jpg` : item.thumbnailUrl.startsWith("http") || item.thumbnailUrl.startsWith("/") ? item.thumbnailUrl : supabase.storage.from("thumbnails").getPublicUrl(item.thumbnailUrl).data.publicUrl,
+          type: item.contentType === "series" ? "show" : "movie", stars: item.stars,
+        })));
+      } catch { if (!cancelled) setRemoteResults(null); }
+      finally { if (!cancelled) setRemoteLoading(false); }
+    })();
+    return () => { cancelled = true; };
+  }, [supabase, query]);
 
   const results = useMemo(() => {
     const normalized = query.trim().toLowerCase();
 
-    // Mock filtering: match title, genre, or year. Replace with a real
-    // search API call once the backend phase begins.
+    // Filter returned catalog results by title, genre, or year.
+    const catalog = remoteResults ?? mockSearchResults;
     const matched = normalized
-      ? mockSearchResults.filter((item) =>
+      ? catalog.filter((item) =>
           [item.title, item.genre, String(item.year)]
             .join(" ")
             .toLowerCase()
             .includes(normalized)
         )
-      : mockSearchResults;
+      : catalog;
 
     const byType = matched.filter((item) => {
       if (activeFilter === "movies") return item.type === "movie";
@@ -52,7 +82,7 @@ export default function SearchResultsPage() {
     const sorted = [...byType];
     switch (sortBy) {
       case "rating":
-        sorted.sort((a, b) => a.rating.localeCompare(b.rating));
+        sorted.sort((a, b) => (b.stars ?? 0) - (a.stars ?? 0));
         break;
       case "date":
         sorted.sort((a, b) => b.year - a.year);
@@ -64,7 +94,7 @@ export default function SearchResultsPage() {
         break; // relevance: keep mock order
     }
     return sorted;
-  }, [query, activeFilter, sortBy]);
+  }, [query, activeFilter, sortBy, remoteResults]);
 
   const hasQuery = query.trim().length > 0;
   const hasResults = results.length > 0;
@@ -110,7 +140,7 @@ export default function SearchResultsPage() {
               className="mb-6"
             />
 
-            <SearchResultsGrid items={results} />
+            {remoteLoading ? <p className="py-8 text-sm text-white/55">Searching catalog…</p> : <SearchResultsGrid items={results} />}
           </>
         )}
       </div>

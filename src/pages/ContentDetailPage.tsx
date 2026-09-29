@@ -6,11 +6,17 @@ import { mockSearchResults } from '@/data/mockSearchResults'
 import { mockRatingsCatalog } from '@/data/mockRatings'
 import type { ContentItem } from '@/data/types'
 import { supabase } from '@/lib/supabase/client'
+import { useAuth } from '@/hooks/useAuth'
+import MyListToggleButton from '@/components/MyListToggleButton'
+import RatingsAndReviews from '@/pages/RatingsAndReviews'
+import { useWatchHistory } from '@/hooks/useWatchHistory'
 
 const placeholderPoster = '/posters/placeholder.svg'
 
 export default function ContentDetailPage() {
   const { id = '' } = useParams()
+  const { user } = useAuth()
+  const { startWatchHistory, updateWatchProgress, getWatchHistory } = useWatchHistory()
   const mockItem = useMemo<ContentItem | undefined>(() => {
     const catalogItem = allContent.find((content) => content.id === id)
     if (catalogItem) return catalogItem
@@ -48,6 +54,10 @@ export default function ContentDetailPage() {
   const [videoError, setVideoError] = useState(false)
   const [posterSource, setPosterSource] = useState(mockItem?.thumbnailUrl ?? placeholderPoster)
   const temporaryUrls = useRef<string[]>([])
+  const videoElement = useRef<HTMLVideoElement | null>(null)
+  const resumeAt = useRef(0)
+  const lastSavedAt = useRef(0)
+  const historyStarted = useRef(false)
 
   useEffect(() => {
     let cancelled = false
@@ -55,6 +65,9 @@ export default function ContentDetailPage() {
     setVideoSource(mockItem?.videoUrl ?? null)
     setVideoError(false)
     setPosterSource(mockItem?.thumbnailUrl ?? placeholderPoster)
+    resumeAt.current = 0
+    lastSavedAt.current = 0
+    historyStarted.current = false
 
     if (mockItem || !supabase) {
       setLoading(false)
@@ -69,12 +82,29 @@ export default function ContentDetailPage() {
         if (!error && data) {
           const content = data as ContentItem
           const localId = encodeURIComponent(content.id)
-          setDetailItem({
+          const thumbnailPath = content.thumbnailUrl
+          const thumbnailUrl = thumbnailPath && !thumbnailPath.startsWith('/') && !thumbnailPath.startsWith('http')
+            ? supabase.storage.from('thumbnails').getPublicUrl(thumbnailPath).data.publicUrl
+            : thumbnailPath || `/posters/${localId}.jpg`
+          const videoPath = content.videoUrl || `/movies/${localId}.mp4`
+          const resolvedContent = {
             ...content,
-            thumbnailUrl: `/posters/${localId}.jpg`,
-            backdropUrl: `/posters/${localId}-backdrop.jpg`,
-            videoUrl: `/movies/${localId}.mp4`,
-          })
+            thumbnailUrl,
+            backdropUrl: content.backdropUrl || `/posters/${localId}-backdrop.jpg`,
+            videoUrl: videoPath,
+          }
+          setDetailItem(resolvedContent)
+          if (!videoPath.startsWith('/') && !videoPath.startsWith('http')) {
+            const { data: signed, error: signedError } = await supabase.storage.from('videos').createSignedUrl(videoPath, 60 * 60 * 4)
+            if (cancelled) return
+            if (signedError) { setVideoError(true) }
+            else {
+              setVideoSource(signed.signedUrl)
+              setDetailItem({ ...resolvedContent, videoUrl: signed.signedUrl })
+            }
+          } else {
+            setVideoSource(videoPath)
+          }
         }
       } catch {
         // Leave the missing-title state visible if the connection fails.
@@ -88,6 +118,21 @@ export default function ContentDetailPage() {
   useEffect(() => () => {
     temporaryUrls.current.forEach((url) => URL.revokeObjectURL(url))
   }, [])
+
+  useEffect(() => {
+    if (!user || !supabase) return
+    void getWatchHistory().then((rows) => {
+      const entry = (rows as { content_slug: string; position_seconds: number; completed: boolean }[] | null)?.find((row) => row.content_slug === id && !row.completed)
+      if (entry) {
+        resumeAt.current = entry.position_seconds
+        const video = videoElement.current
+        if (video?.readyState && video.duration > entry.position_seconds) {
+          video.currentTime = entry.position_seconds
+          resumeAt.current = 0
+        }
+      }
+    }).catch(() => undefined)
+  }, [id, user?.id])
 
   if (loading) {
     return <div className="px-6 py-12 text-white/70 md:px-12">Loading title…</div>
@@ -104,6 +149,26 @@ export default function ContentDetailPage() {
   }
 
   const item = detailItem
+
+  const handlePlay = () => {
+    if (!user || !supabase || historyStarted.current) return
+    historyStarted.current = true
+    void startWatchHistory(item.id).catch(() => undefined)
+  }
+  const handleLoadedMetadata = (event: React.SyntheticEvent<HTMLVideoElement>) => {
+    if (resumeAt.current > 0 && event.currentTarget.duration > resumeAt.current) {
+      event.currentTarget.currentTime = resumeAt.current
+      resumeAt.current = 0
+    }
+  }
+  const handleProgress = (event: React.SyntheticEvent<HTMLVideoElement>) => {
+    const video = event.currentTarget
+    if (!user || !supabase || !Number.isFinite(video.duration) || video.duration <= 0) return
+    if (video.currentTime - lastSavedAt.current < 15 && !video.ended) return
+    lastSavedAt.current = video.currentTime
+    const percent = video.ended ? 100 : Math.min(100, (video.currentTime / video.duration) * 100)
+    void updateWatchProgress(item.id, percent, Math.floor(video.currentTime)).catch(() => undefined)
+  }
 
   const chooseVideo = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -137,7 +202,7 @@ export default function ContentDetailPage() {
         <div>
           <div className="relative aspect-video overflow-hidden rounded-lg border border-white/10 bg-black">
             {videoSource && !videoError ? (
-              <video key={videoSource} className="h-full w-full" controls playsInline preload="metadata" poster={posterSource} onError={() => setVideoError(true)}>
+              <video ref={videoElement} key={videoSource} className="h-full w-full" controls playsInline preload="metadata" poster={posterSource} onPlay={handlePlay} onLoadedMetadata={handleLoadedMetadata} onTimeUpdate={handleProgress} onEnded={handleProgress} onError={() => setVideoError(true)}>
                 <source src={videoSource} />
                 Your browser cannot play this video format.
               </video>
@@ -146,12 +211,12 @@ export default function ContentDetailPage() {
                 <img src={posterSource} alt="" className="absolute inset-0 h-full w-full object-cover opacity-25" onError={(event) => { event.currentTarget.src = placeholderPoster }} />
                 <div className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full bg-brand text-black"><Play fill="currentColor" /></div>
                 <p className="relative z-10 max-w-lg text-sm text-white/80">
-                  {videoError ? `Couldn't open /movies/${item.id}.mp4. Select the movie file from your device to play it.` : 'No local movie file is available yet. Select a movie file from your device to play it.'}
+                  {videoError && supabase && item.videoUrl && !item.videoUrl.startsWith('/') ? 'Sign in to watch this movie, or ask an admin to confirm its video upload.' : videoError ? `Couldn't open /movies/${item.id}.mp4. Select the movie file from your device to play it.` : 'No movie file is available yet. Select a movie file from your device to play it.'}
                 </p>
-                <label className="relative z-10 cursor-pointer rounded-md bg-white px-4 py-2.5 text-sm font-semibold text-black hover:bg-white/85">
+                {supabase && !user ? <Link to="/account" className="relative z-10 rounded-md bg-brand px-4 py-2.5 text-sm font-semibold text-black">Sign in to watch</Link> : <label className="relative z-10 cursor-pointer rounded-md bg-white px-4 py-2.5 text-sm font-semibold text-black hover:bg-white/85">
                   Choose movie file
                   <input className="sr-only" type="file" accept="video/*,.mkv,.avi" onChange={chooseVideo} />
-                </label>
+                </label>}
               </div>
             )}
           </div>
@@ -166,11 +231,13 @@ export default function ContentDetailPage() {
           <h1 className="text-3xl font-semibold">{item.title}</h1>
           <p className="mt-3 text-sm text-white/60">{[item.year, item.rating, ...item.genres, item.durationMinutes ? `${item.durationMinutes} min` : null].filter(Boolean).join(' · ')}</p>
           <p className="mt-5 leading-7 text-white/80">{item.description}</p>
+          <div className="mt-5"><MyListToggleButton slug={item.id} /></div>
           <p className="mt-6 border-t border-white/10 pt-4 text-xs leading-5 text-white/45">
-            To keep the poster after closing this page, place it in <code>public/movies</code> and <code>public/posters</code>, named <code>{item.id}.mp4</code> and <code>{item.id}.jpg</code>.
+            To use local files instead, put the movie under <code>public/movies</code> and the poster under <code>public/posters</code>, named <code>{item.id}.mp4</code> and <code>{item.id}.jpg</code>.
           </p>
         </aside>
       </div>
+      <div className="px-6 pb-12 md:px-12"><RatingsAndReviews slug={item.id} /></div>
     </article>
   )
 }

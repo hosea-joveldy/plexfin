@@ -6,7 +6,7 @@ drop policy if exists thumbnails_insert on storage.objects;
 drop policy if exists thumbnails_select on storage.objects;
 -- Video files are private; thumbnail assets are publicly readable.
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
-values ('videos', 'videos', false, 524288000, array['video/mp4','video/webm','video/quicktime','video/x-matroska'])
+values ('videos', 'videos', false, 1500000000, array['video/mp4','video/webm','video/quicktime','video/x-matroska'])
 on conflict (id) do update set public = excluded.public, file_size_limit = excluded.file_size_limit, allowed_mime_types = excluded.allowed_mime_types;
 
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)

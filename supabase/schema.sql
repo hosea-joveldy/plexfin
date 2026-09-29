@@ -242,6 +242,20 @@ create trigger watch_history_set_updated_at
   before update on public.watch_history
   for each row execute function public.set_updated_at();
 
+
+-- -----------------------------------------------------------------------------
+-- watchlist — titles saved by a user for later
+-- -----------------------------------------------------------------------------
+create table if not exists public.watchlist (
+  user_id uuid not null references public.users (id) on delete cascade,
+  content_id uuid not null references public.content (id) on delete cascade,
+  created_at timestamptz not null default now(),
+  primary key (user_id, content_id)
+);
+
+create index if not exists watchlist_user_created_idx
+  on public.watchlist (user_id, created_at desc);
+
 -- -----------------------------------------------------------------------------
 -- reviews — one written review per user per content item
 -- -----------------------------------------------------------------------------

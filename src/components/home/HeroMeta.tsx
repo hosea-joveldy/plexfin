@@ -1,18 +1,19 @@
 import { cn } from "@/lib/utils";
-import { mockHero } from "@/data/mockHero";
+import type { ContentItem } from "@/data/types";
 
 interface HeroMetaProps {
   className?: string;
+  content: ContentItem;
 }
 
 /** Year / rating / genre / duration strip under the hero title. */
-export default function HeroMeta({ className }: HeroMetaProps) {
+export default function HeroMeta({ className, content }: HeroMetaProps) {
   const metaItems = [
-    mockHero.year.toString(),
-    mockHero.rating,
-    mockHero.genre,
-    mockHero.duration,
-  ];
+    String(content.year),
+    content.rating,
+    content.genres[0],
+    content.durationMinutes ? `${content.durationMinutes} min` : null,
+  ].filter(Boolean) as string[];
 
   return (
     <ul

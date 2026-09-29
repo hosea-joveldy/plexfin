@@ -38,9 +38,11 @@ as $$
   select jsonb_build_object(
     'id', c.slug,
     'title', c.title,
+    'contentType', c.content_type,
     'description', c.description,
     'logline', c.logline,
     'thumbnailUrl', c.thumbnail_url,
+    'videoUrl', c.video_url,
     'backdropUrl', c.backdrop_url,
     'year', c.release_year,
     'rating', c.rating_code,
@@ -379,3 +381,26 @@ returns jsonb language sql stable set search_path = '' as $$
   where c.slug = p_slug and c.status = 'published'
   limit 1;
 $$;
+
+
+-- A user's saved list, shaped like catalog cards and scoped to auth.uid().
+create or replace function public.get_my_list()
+returns jsonb language sql stable security invoker set search_path = '' as $$
+  select coalesce(jsonb_agg(public.content_item_json(c) order by w.created_at desc), '[]'::jsonb)
+  from public.watchlist w
+  join public.content c on c.id = w.content_id
+  where w.user_id = auth.uid() and c.status = 'published';
+$$;
+
+create or replace function public.toggle_my_list(p_content_slug text)
+returns boolean language plpgsql security invoker set search_path = '' as $$
+declare content_uuid uuid;
+begin
+  if auth.uid() is null then raise exception 'Sign in to use My List'; end if;
+  select id into content_uuid from public.content where slug = p_content_slug and status = 'published';
+  if content_uuid is null then raise exception 'Content not found'; end if;
+  delete from public.watchlist where user_id = auth.uid() and content_id = content_uuid;
+  if found then return false; end if;
+  insert into public.watchlist(user_id, content_id) values (auth.uid(), content_uuid);
+  return true;
+end; $$;

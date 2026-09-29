@@ -1,6 +1,6 @@
 # PlexFin
 
-PlexFin is a local-first streaming catalog UI for short films and TV shows. It uses placeholder catalog metadata until you add your own titles and media.
+PlexFin is a Supabase-backed streaming catalog for user-provided movies and shows. It includes account access, browsing/search, title playback, watch progress, ratings/reviews, My List, and an admin upload page.
 
 ## Run locally
 
@@ -9,25 +9,34 @@ npm install
 npm run dev
 ```
 
-The app works without Supabase credentials. To connect the optional catalog backend, copy `.env.example` to `.env`, set `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`, then restart Vite. Never put a service-role key in browser code or a `VITE_` variable.
+Copy `.env.example` to `.env`, then set `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`. Restart Vite after changing the file. Never put a service-role key in browser code or a `VITE_` variable.
 
-## Local movies and posters
-
-Put files on this machine in these folders, named with the title's content ID/slug:
-
-- Movies: `public/movies/<id>.mp4` (for example `public/movies/the-last-lighthouse.mp4`).
-- Posters: `public/posters/<id>.jpg` (for example `public/posters/the-last-lighthouse.jpg`).
-- Optional wide backdrop: `public/posters/<id>-backdrop.jpg`.
-
-Home and search cards use local poster paths, and clicking a title opens its detail/player page. If the movie file is not in the expected folder, use **Choose movie file** on that page to play a file directly from your computer for the current browser session. A selected file is not uploaded or copied by the app. The placeholder poster is shown until you provide the poster. Local movie files are ignored by Git; do not commit private or large film files.
-
-Use MP4/H.264 for broad browser playback support. Browser playback depends on the codec as well as the file extension.
+The app remains usable without credentials with its local mock catalog. Supabase accounts, catalog data, uploads, watch history, ratings, reviews, and My List require the SQL setup and a connected Supabase project.
 
 ## Supabase setup
 
-For a fresh database or an existing database using this project schema, run **`supabase/setup.sql` once** in the Supabase SQL Editor. It combines schema, auth bootstrap, catalog/rating/watch-history RPCs, RLS, and Storage setup in dependency order. It is designed to be rerun without dropping existing rows. The original files remain in `supabase/` as readable sections.
+Run **`supabase/setup.sql`** in the Supabase SQL Editor. It combines the schema, auth bootstrap, catalog RPCs, My List, ratings/reviews, watch history, RLS, and Storage buckets/policies. It can be rerun and preserves existing rows.
 
-The Supabase Storage buckets are optional and are not used for local playback. Local files stay under `public/` on your machine. Auth UI, settings persistence, and catalog administration are not implemented yet.
+After you create an account, promote the intended administrator in the Supabase SQL Editor:
+
+```sql
+update public.users set role = 'admin' where email = 'you@example.com';
+```
+
+The app shows the Admin page only to that role. Database RLS and Storage policies enforce the same restriction, so hiding the UI is not the security boundary. Regular signed-in users can browse and play published titles, save them to My List, record progress, rate, and review.
+
+## Add movies
+
+Sign in as an admin and open **Admin** in the sidebar. Enter the title metadata, poster, and movie file, then choose **Upload and publish movie**. Posters go to the public `thumbnails` bucket; video files go to the private `videos` bucket. Playback uses a short-lived signed URL. Confirm the Supabase project’s Storage file-size limit and plan allow your video size. MP4/H.264 is recommended for browser support.
+
+For local development without Storage, put files in `public/movies/<slug>.mp4` and `public/posters/<slug>.jpg`; the title detail page can also preview a selected local file for the current session. Movie files under `public/movies` are ignored by Git.
+
+## Current limits
+
+- The Ratings filter and Settings screens still use mock data/placeholders.
+- Content administration currently supports adding and publishing titles; editing and deleting titles are not in the UI.
+- Browser playback depends on a supported codec. This app does not transcode or create adaptive HLS/DASH streams.
+- The SQL files other than `setup.sql` remain as readable component scripts; use the combined file for normal setup.
 
 ## Commands
 

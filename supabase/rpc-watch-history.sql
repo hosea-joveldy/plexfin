@@ -8,7 +8,11 @@ begin
   if content_uuid is null then raise exception 'Content not found'; end if;
   insert into public.watch_history (user_id, content_id, watch_count, progress_percent, position_seconds, completed)
   values (auth.uid(), content_uuid, 1, 0, 0, false)
-  on conflict (user_id, content_id) do update set watch_count = public.watch_history.watch_count + 1, completed = false, progress_percent = 0, position_seconds = 0, last_watched_at = now()
+  on conflict (user_id, content_id) do update set
+    watch_count = public.watch_history.watch_count + 1,
+    progress_percent = case when public.watch_history.completed then 0 else public.watch_history.progress_percent end,
+    position_seconds = case when public.watch_history.completed then 0 else public.watch_history.position_seconds end,
+    completed = false, last_watched_at = now()
   returning id into result_id;
   return result_id;
 end; $$;

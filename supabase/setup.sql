@@ -2,6 +2,8 @@
 -- Run this one file in the Supabase SQL Editor.
 -- It creates/updates tables and functions, recreates triggers/policies, and
 -- preserves existing rows. It does not delete or reset user data.
+-- Promote the first administrator separately after signup, for example:
+-- update public.users set role = 'admin' where email = 'you@example.com';
 
 
 
@@ -260,6 +262,20 @@ create trigger watch_history_set_updated_at
   before update on public.watch_history
   for each row execute function public.set_updated_at();
 
+
+-- -----------------------------------------------------------------------------
+-- watchlist — titles saved by a user for later
+-- -----------------------------------------------------------------------------
+create table if not exists public.watchlist (
+  user_id uuid not null references public.users (id) on delete cascade,
+  content_id uuid not null references public.content (id) on delete cascade,
+  created_at timestamptz not null default now(),
+  primary key (user_id, content_id)
+);
+
+create index if not exists watchlist_user_created_idx
+  on public.watchlist (user_id, created_at desc);
+
 -- -----------------------------------------------------------------------------
 -- reviews — one written review per user per content item
 -- -----------------------------------------------------------------------------
@@ -355,6 +371,23 @@ create trigger on_auth_user_created
   after insert on auth.users
   for each row execute function public.handle_new_user();
 
+-- Backfill app profiles for accounts that existed before this setup was applied.
+insert into public.users (id, email, display_name)
+select id, email, coalesce(raw_user_meta_data ->> 'display_name', raw_user_meta_data ->> 'name')
+from auth.users
+where email is not null
+on conflict (id) do update set email = excluded.email;
+
+insert into public.profiles (id, full_name)
+select id, coalesce(raw_user_meta_data ->> 'full_name', raw_user_meta_data ->> 'name')
+from auth.users
+where email is not null
+on conflict (id) do nothing;
+
+insert into public.settings (user_id)
+select id from public.users
+on conflict (user_id) do nothing;
+
 
 -- ============================================================================
 -- Catalog RPCs
@@ -401,9 +434,11 @@ as $$
   select jsonb_build_object(
     'id', c.slug,
     'title', c.title,
+    'contentType', c.content_type,
     'description', c.description,
     'logline', c.logline,
     'thumbnailUrl', c.thumbnail_url,
+    'videoUrl', c.video_url,
     'backdropUrl', c.backdrop_url,
     'year', c.release_year,
     'rating', c.rating_code,
@@ -744,6 +779,29 @@ returns jsonb language sql stable set search_path = '' as $$
 $$;
 
 
+-- A user's saved list, shaped like catalog cards and scoped to auth.uid().
+create or replace function public.get_my_list()
+returns jsonb language sql stable security invoker set search_path = '' as $$
+  select coalesce(jsonb_agg(public.content_item_json(c) order by w.created_at desc), '[]'::jsonb)
+  from public.watchlist w
+  join public.content c on c.id = w.content_id
+  where w.user_id = auth.uid() and c.status = 'published';
+$$;
+
+create or replace function public.toggle_my_list(p_content_slug text)
+returns boolean language plpgsql security invoker set search_path = '' as $$
+declare content_uuid uuid;
+begin
+  if auth.uid() is null then raise exception 'Sign in to use My List'; end if;
+  select id into content_uuid from public.content where slug = p_content_slug and status = 'published';
+  if content_uuid is null then raise exception 'Content not found'; end if;
+  delete from public.watchlist where user_id = auth.uid() and content_id = content_uuid;
+  if found then return false; end if;
+  insert into public.watchlist(user_id, content_id) values (auth.uid(), content_uuid);
+  return true;
+end; $$;
+
+
 -- ============================================================================
 -- Ratings and reviews RPCs
 -- Source: supabase/rpc-ratings-reviews.sql
@@ -826,7 +884,11 @@ begin
   if content_uuid is null then raise exception 'Content not found'; end if;
   insert into public.watch_history (user_id, content_id, watch_count, progress_percent, position_seconds, completed)
   values (auth.uid(), content_uuid, 1, 0, 0, false)
-  on conflict (user_id, content_id) do update set watch_count = public.watch_history.watch_count + 1, completed = false, progress_percent = 0, position_seconds = 0, last_watched_at = now()
+  on conflict (user_id, content_id) do update set
+    watch_count = public.watch_history.watch_count + 1,
+    progress_percent = case when public.watch_history.completed then 0 else public.watch_history.progress_percent end,
+    position_seconds = case when public.watch_history.completed then 0 else public.watch_history.position_seconds end,
+    completed = false, last_watched_at = now()
   returning id into result_id;
   return result_id;
 end; $$;
@@ -863,6 +925,9 @@ drop policy if exists ratings_select on public.ratings;
 drop policy if exists watch_history_user on public.watch_history;
 drop policy if exists reviews_user on public.reviews;
 drop policy if exists settings_user on public.settings;
+drop policy if exists watchlist_user on public.watchlist;
+drop policy if exists genres_admin_manage on public.genres;
+drop policy if exists content_genres_admin_manage on public.content_genres;
 drop policy if exists profiles_select on public.profiles;
 drop policy if exists content_admin on public.content;
 drop policy if exists content_ratings_user on public.content_ratings;
@@ -883,9 +948,12 @@ drop policy if exists watch_history_manage_self on public.watch_history;
 drop policy if exists reviews_read on public.reviews;
 drop policy if exists reviews_manage_self on public.reviews;
 drop policy if exists settings_manage_self on public.settings;
+drop policy if exists watchlist_manage_self on public.watchlist;
+drop policy if exists genres_admin_manage on public.genres;
+drop policy if exists content_genres_admin_manage on public.content_genres;
 
 do $$ declare t text; begin
-  foreach t in array array['users','profiles','content','genres','content_genres','languages','content_languages','ratings','content_ratings','watch_history','reviews','settings'] loop
+  foreach t in array array['users','profiles','content','genres','content_genres','languages','content_languages','ratings','content_ratings','watch_history','watchlist','reviews','settings'] loop
     execute format('alter table public.%I enable row level security', t);
   end loop;
 end $$;
@@ -897,6 +965,8 @@ create policy content_read_published on public.content for select to anon, authe
 create policy content_admin_manage on public.content for all to authenticated using (public.is_media_admin()) with check (public.is_media_admin());
 create policy genres_read on public.genres for select to anon, authenticated using (true);
 create policy content_genres_read on public.content_genres for select to anon, authenticated using (true);
+create policy genres_admin_manage on public.genres for all to authenticated using (public.is_media_admin()) with check (public.is_media_admin());
+create policy content_genres_admin_manage on public.content_genres for all to authenticated using (public.is_media_admin()) with check (public.is_media_admin());
 create policy languages_read on public.languages for select to anon, authenticated using (true);
 create policy content_languages_read on public.content_languages for select to anon, authenticated using (true);
 create policy ratings_read on public.ratings for select to anon, authenticated using (true);
@@ -906,6 +976,7 @@ create policy watch_history_manage_self on public.watch_history for all to authe
 create policy reviews_read on public.reviews for select to anon, authenticated using (true);
 create policy reviews_manage_self on public.reviews for all to authenticated using (user_id = (select auth.uid())) with check (user_id = (select auth.uid()));
 create policy settings_manage_self on public.settings for all to authenticated using (user_id = (select auth.uid())) with check (user_id = (select auth.uid()));
+create policy watchlist_manage_self on public.watchlist for all to authenticated using (user_id = (select auth.uid())) with check (user_id = (select auth.uid()));
 
 
 -- ============================================================================
@@ -921,7 +992,7 @@ drop policy if exists thumbnails_insert on storage.objects;
 drop policy if exists thumbnails_select on storage.objects;
 -- Video files are private; thumbnail assets are publicly readable.
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
-values ('videos', 'videos', false, 524288000, array['video/mp4','video/webm','video/quicktime','video/x-matroska'])
+values ('videos', 'videos', false, 1500000000, array['video/mp4','video/webm','video/quicktime','video/x-matroska'])
 on conflict (id) do update set public = excluded.public, file_size_limit = excluded.file_size_limit, allowed_mime_types = excluded.allowed_mime_types;
 
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)

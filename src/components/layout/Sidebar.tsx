@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Home, Search, ThumbsUp, Settings } from "lucide-react";
+import { Home, Search, ThumbsUp, Settings, Bookmark, UserRound, ShieldPlus } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import SidebarNavItem from "./SidebarNavItem";
 import PlexFinLogo from "@/components/ui/PlexFinLogo";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/useAuth";
 
 interface SidebarProps {
   className?: string;
@@ -29,6 +30,7 @@ export default function Sidebar({
   onHoverChange,
 }: SidebarProps) {
   const location = useLocation();
+  const { role } = useAuth();
   const isSearchPage = location.pathname === "/search";
   const [isHovered, setIsHovered] = useState(false);
   const isExpanded = isHovered && !isSearchOpen;
@@ -60,7 +62,7 @@ export default function Sidebar({
         <span className="sr-only">PlexFin</span>
       </Link>
       {/* Nav block anchored below the brand mark. */}
-      <ul className="mt-12 flex w-full flex-col items-start gap-12">
+      <ul className="mt-8 flex w-full flex-col items-start gap-5 overflow-y-auto pb-4">
         <SidebarNavItem icon={Home} label="Home" to="/" active={location.pathname === "/"} railExpanded={isExpanded} />
         <SidebarNavItem
           icon={Search}
@@ -71,6 +73,9 @@ export default function Sidebar({
           onClick={() => onSearchOpenChange?.(!isSearchOpen)}
         />
         <SidebarNavItem icon={ThumbsUp} label="Ratings" to="/ratings" railExpanded={isExpanded} />
+        <SidebarNavItem icon={Bookmark} label="My List" to="/my-list" active={location.pathname === "/my-list"} railExpanded={isExpanded} />
+        {role === "admin" && <SidebarNavItem icon={ShieldPlus} label="Admin" to="/admin" active={location.pathname.startsWith("/admin")} railExpanded={isExpanded} />}
+        <SidebarNavItem icon={UserRound} label="Account" to="/account" active={location.pathname === "/account"} railExpanded={isExpanded} />
         <SidebarNavItem icon={Settings} label="Settings" to="/settings" railExpanded={isExpanded} />
       </ul>
     </nav>
