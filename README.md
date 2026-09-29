@@ -18,17 +18,50 @@
 
 PlexFin is a free streaming website for short films and TV shows across genres. The goal is a clean, navigable browsing experience: discover titles on the home page, search for content, and filter by ratings — all wrapped in a lightweight, responsive UI.
 
-**What works today (UI-only phase):**
+**What works today:
+
+- **Backend Integration** — Supabase backend fully integrated for data persistence, authentication, and API communication
+**
 
 - **Home** — hero spotlight plus horizontally scrolling content rows of titles
 - **Search** — a flyout/overlay search with recent searches, filters, and a results page
 - **Ratings filter** — a sidebar-driven ratings filter with an accordion and filter summary
 - **Settings** — a placeholder settings screen
+- **Backend Integration** — Supabase backend fully integrated for data persistence, authentication, and API communication
 - Global layout with a sidebar navigation shared across all screens
 
 All content is mock/placeholder data. Navigation between screens works, but nothing is functional yet — no playback, no persistence, no real search. See [Current Phase](#current-phase-ui-only) below.
 
 ## Tech Stack
+
+### Backend (Supabase)
+- **Supabase**: Open-source Firebase alternative for backend services
+  - Auth: User authentication
+  - Database: PostgreSQL for data persistence
+  - Storage: File storage for media
+  - API: RESTful API for client-server communication
+
+### Supabase Setup
+1. Initialize Supabase project
+   ```bash
+   npx supabase init
+   ```
+2. Create necessary tables using SQL in the following order:
+   - `genres`
+   - `titles`
+   - `episodes`
+   - `user_ratings`
+3. Set up environment variables (see [.env.example](#))
+
+### Environment Variables
+Create a `.env` file with the following variables:
+```env
+SUPABASE_URL=your_supabase_url
+SUPABASE_ANON_KEY=your_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+```
+
+
 
 | Layer | Technology | Notes |
 | --- | --- | --- |
