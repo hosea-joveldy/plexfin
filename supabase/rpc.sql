@@ -212,7 +212,7 @@ as $$
       w.last_watched_at
     from public.watch_history w
     join public.content c on c.id = w.content_id
-    where w.user_id = p_user_id
+    where w.user_id = auth.uid()
       and w.progress_percent > 0
       and w.progress_percent < 100
       and c.status = 'published'
@@ -358,4 +358,14 @@ as $$
     order by coalesce(cr.average_rating, 0) desc, c.id
     limit least(p_page_size, 100) offset (greatest(p_page, 1) - 1) * least(p_page_size, 100)
   ) rows
+$$;
+
+
+-- Featured item for the home hero; falls back to the newest published item.
+create or replace function public.get_featured_content()
+returns jsonb language sql stable set search_path = '' as $$
+  select public.content_item_json(c) from public.content c
+  where c.status = 'published'
+  order by c.is_featured desc, c.release_year desc, c.created_at desc, c.id
+  limit 1;
 $$;

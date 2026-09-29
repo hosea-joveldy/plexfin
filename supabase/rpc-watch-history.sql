@@ -1,117 +1,30 @@
--- Supabase RPC functions for watch history tracking
+-- Watch history functions use catalog slugs at the API boundary.
+create or replace function public.start_watch_history(p_content_slug text)
+returns uuid language plpgsql security invoker set search_path = '' as $$
+declare result_id uuid; content_uuid uuid;
+begin
+  if auth.uid() is null then raise exception 'Sign in to record watch history'; end if;
+  select id into content_uuid from public.content where slug = p_content_slug and status = 'published';
+  if content_uuid is null then raise exception 'Content not found'; end if;
+  insert into public.watch_history (user_id, content_id, watch_count, progress_percent, position_seconds, completed)
+  values (auth.uid(), content_uuid, 1, 0, 0, false)
+  on conflict (user_id, content_id) do update set watch_count = public.watch_history.watch_count + 1, completed = false, progress_percent = 0, position_seconds = 0, last_watched_at = now()
+  returning id into result_id;
+  return result_id;
+end; $$;
 
--- Create or update watch history entry when starting to watch content
-CREATE OR REPLACE FUNCTION start_watch_history(
-    user_id uuid,
-    content_id uuid,
-    OUT watch_history_id uuid
-) RETURNS uuid AS $$
-DECLARE
-    existing_entry uuid;
-BEGIN
-    -- Check if an existing uncompleted entry exists for the user and content
-    SELECT id INTO existing_entry FROM watch_history
-    WHERE user_id = start_watch_history.user_id
-      AND content_id = start_watch_history.content_id
-      AND completed_at IS NULL
-    LIMIT 1;
+create or replace function public.update_watch_progress(p_content_slug text, p_progress_percent numeric, p_position_seconds integer)
+returns void language plpgsql security invoker set search_path = '' as $$
+begin
+  if p_progress_percent < 0 or p_progress_percent > 100 or p_position_seconds < 0 then raise exception 'Invalid playback progress'; end if;
+  update public.watch_history w set progress_percent = p_progress_percent, position_seconds = p_position_seconds, completed = p_progress_percent >= 95, last_watched_at = now()
+  from public.content c where w.content_id = c.id and c.slug = p_content_slug and w.user_id = auth.uid();
+  if not found then raise exception 'Watch history not found'; end if;
+end; $$;
 
-    IF existing_entry IS NOT NULL THEN
-        -- Return existing entry ID if found
-        watch_history_id := existing_entry;
-        RETURN watch_history_id;
-    ELSE
-        -- Insert new watch history entry
-        INSERT INTO watch_history (user_id, content_id, progress, last_watched)
-        VALUES (user_id, content_id, 0, NOW())
-        RETURNING id INTO watch_history_id;
-
-        RETURN watch_history_id;
-    END IF;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-
--- Update watch progress for an existing watch history entry
-CREATE OR REPLACE FUNCTION update_watch_progress(
-    watch_history_id uuid,
-    new_progress integer,
-    OUT current_progress integer
-) RETURNS integer AS $$
-BEGIN
-    -- Validate input progress
-    IF new_progress < 0 OR new_progress > 100 THEN
-        RAISE EXCEPTION 'Progress must be between 0 and 100';
-    END IF;
-
-    -- Update progress and timestamp
-    UPDATE watch_history
-    SET progress = new_progress,
-        last_watched = NOW(),
-        completed_at = NULL  -- Reset completion if updating progress
-    WHERE id = update_watch_progress.watch_history_id
-    RETURNING progress INTO current_progress;
-
-    RETURN current_progress;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-
--- Mark a watch history entry as finished
-CREATE OR REPLACE FUNCTION finish_watch_history(
-    watch_history_id uuid,
-    OUT is_completed boolean
-) RETURNS boolean AS $$
-BEGIN
-    -- Update to mark as completed
-    UPDATE watch_history
-    SET progress = 100,
-        completed_at = NOW(),
-        last_watched = NOW()
-    WHERE id = finish_watch_history.watch_history_id
-    RETURNING completed_at IS NOT NULL INTO is_completed;
-
-    RETURN is_completed;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-
--- Get watch history for a user
-CREATE OR REPLACE FUNCTION get_watch_history(
-    user_id uuid
-) RETURNS TABLE (id uuid, content_id uuid, progress integer, last_watched timestamptz, completed_at timestamptz) AS $$
-BEGIN
-    RETURN QUERY
-    SELECT id, content_id, progress, last_watched, completed_at
-    FROM watch_history
-    WHERE user_id = get_watch_history.user_id
-    ORDER BY last_watched DESC;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-
--- Get current watch progress for specific content
-CREATE OR REPLACE FUNCTION get_watch_progress(
-    user_id uuid,
-    content_id uuid,
-    OUT progress integer,
-    OUT last_watched timestamptz
-) RETURNS RECORD AS $$
-DECLARE
-    wh_record watch_history;
-BEGIN
-    SELECT * INTO wh_record
-    FROM watch_history
-    WHERE user_id = get_watch_progress.user_id
-      AND content_id = get_watch_progress.content_id
-      AND completed_at IS NULL
-    ORDER BY last_watched DESC
-    LIMIT 1;
-
-    IF wh_record IS NULL THEN
-        progress := 0;
-        last_watched := NULL;
-    ELSE
-        progress := wh_record.progress;
-        last_watched := wh_record.last_watched;
-    END IF;
-
-    RETURN;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+create or replace function public.get_watch_history()
+returns table(id uuid, content_slug text, progress_percent numeric, position_seconds integer, completed boolean, last_watched_at timestamptz)
+language sql stable security invoker set search_path = '' as $$
+  select w.id, c.slug, w.progress_percent, w.position_seconds, w.completed, w.last_watched_at
+  from public.watch_history w join public.content c on c.id = w.content_id where w.user_id = auth.uid() order by w.last_watched_at desc;
+$$;

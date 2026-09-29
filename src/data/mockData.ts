@@ -1,20 +1,6 @@
-export const mockHero = {
-  id: '1',
-  title: 'Mock Hero Title',
-  backgroundImage: '/placeholder.jpg',
-  // ... other hero fields
-};
+import { contentRows } from './mock-rows'
 
-export const mockContentRows = [
-  {
-    type: 'continue_watching' as const,
-    title: 'Continue Watching',
-    items: [/* mock items */],
-  },
-  {
-    type: 'trending' as const,
-    title: 'Trending',
-    items: [/* mock items */],
-  },
-  // ... other rows
-];
+export const mockContentRows = contentRows.map((row) => ({
+  ...row,
+  type: row.id === 'continue-watching' ? 'continue_watching' : row.id,
+}))

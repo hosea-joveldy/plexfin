@@ -1,200 +1,60 @@
--- supabase/rpc-ratings-reviews.sql
--- RPC functions for ratings and reviews
-
-
--- Create a new rating for content (1-5 stars)
-create or replace function create_rating(
-  user_id uuid,
-  content_id uuid,
-  rating int
-)
-returns content_ratings
-language plpgsql
-security invoker
-as $$
+-- Ratings and reviews functions accept the public content slug used by the UI.
+create or replace function public.refresh_content_rating(p_content_id uuid)
+returns void language plpgsql security definer set search_path = '' as $$
+declare vals record;
 begin
-  -- Ensure rating is between 1 and 5
-  if rating < 1 or rating > 5 then
-    raise exception 'Rating must be between 1 and 5';
-  end if;
+  select coalesce(avg(rating), 0)::numeric(3,2) as average_rating, count(*)::integer as rating_count,
+    count(*) filter (where rating = 5)::integer as five_count,
+    count(*) filter (where rating = 4)::integer as four_count,
+    count(*) filter (where rating = 3)::integer as three_count,
+    count(*) filter (where rating = 2)::integer as two_count,
+    count(*) filter (where rating = 1)::integer as one_count
+  into vals from public.ratings where content_id = p_content_id;
+  insert into public.content_ratings(content_id, average_rating, rating_count, five_star_count, four_star_count, three_star_count, two_star_count, one_star_count)
+  values (p_content_id, vals.average_rating, vals.rating_count, vals.five_count, vals.four_count, vals.three_count, vals.two_count, vals.one_count)
+  on conflict (content_id) do update set average_rating = excluded.average_rating, rating_count = excluded.rating_count, five_star_count = excluded.five_star_count, four_star_count = excluded.four_star_count, three_star_count = excluded.three_star_count, two_star_count = excluded.two_star_count, one_star_count = excluded.one_star_count, updated_at = now();
+end; $$;
 
-  -- Check if user already rated this content
-  if exists (
-    select 1 from content_ratings
-    where user_id = create_rating.user_id
-      and content_id = create_rating.content_id
-  ) then
-    raise exception 'User already rated this content';
-  end if;
-
-  insert into content_ratings (user_id, content_id, rating)
-  values (user_id, content_id, rating)
-  returning *;
-end;
-$$;
-
-
--- Update existing rating
-create or replace function update_rating(
-  user_id uuid,
-  content_id uuid,
-  new_rating int
-)
-returns content_ratings
-language plpgsql
-security invoker
-as $$
+create or replace function public.set_rating(p_content_slug text, p_rating smallint)
+returns public.ratings language plpgsql security invoker set search_path = '' as $$
+declare result public.ratings; content_uuid uuid;
 begin
-  if new_rating < 1 or new_rating > 5 then
-    raise exception 'Rating must be between 1 and 5';
-  end if;
+  if auth.uid() is null then raise exception 'Sign in to rate content'; end if;
+  if p_rating < 1 or p_rating > 5 then raise exception 'Rating must be from 1 to 5'; end if;
+  select id into content_uuid from public.content where slug = p_content_slug and status = 'published';
+  if content_uuid is null then raise exception 'Content not found'; end if;
+  insert into public.ratings (user_id, content_id, rating) values (auth.uid(), content_uuid, p_rating)
+  on conflict (user_id, content_id) do update set rating = excluded.rating, updated_at = now() returning * into result;
+  perform public.refresh_content_rating(content_uuid);
+  return result;
+end; $$;
 
-  update content_ratings
-  set rating = new_rating,
-      updated_at = now()
-  where user_id = update_rating.user_id
-    and content_id = update_rating.content_id
-  returning *;
-end;
+create or replace function public.get_user_rating(p_content_slug text)
+returns smallint language sql stable security invoker set search_path = '' as $$
+  select r.rating from public.ratings r join public.content c on c.id = r.content_id
+  where r.user_id = auth.uid() and c.slug = p_content_slug;
 $$;
 
-
--- Delete a rating
-create or replace function delete_rating(
-  user_id uuid,
-  content_id uuid
-)
-returns content_ratings
-language plpgsql
-security invoker
-as $$
-delete from content_ratings
-where user_id = delete_rating.user_id
-  and content_id = delete_rating.content_id
-returning *;
+create or replace function public.get_content_ratings(p_content_slug text)
+returns table(average_rating numeric, rating_count bigint) language sql stable security invoker set search_path = '' as $$
+  select coalesce(avg(r.rating), 0)::numeric, count(*) from public.ratings r join public.content c on c.id = r.content_id where c.slug = p_content_slug;
 $$;
 
-
--- Get user's rating for specific content
-create or replace function get_user_rating(
-  user_id uuid,
-  content_id uuid
-)
-returns content_ratings
-language sql
-security invoker
-as $$
-select * from content_ratings
-where user_id = get_user_rating.user_id
-  and content_id = get_user_rating.content_id;
-$$;
-
-
--- Create a new review
-create or replace function create_review(
-  user_id uuid,
-  content_id uuid,
-  review_text text
-)
-returns reviews
-language plpgsql
-security invoker
-as $$
+create or replace function public.set_review(p_content_slug text, p_body text, p_title text default null, p_is_spoiler boolean default false)
+returns public.reviews language plpgsql security invoker set search_path = '' as $$
+declare result public.reviews; content_uuid uuid;
 begin
-  -- Check if user already reviewed this content
-  if exists (
-    select 1 from reviews
-    where user_id = create_review.user_id
-      and content_id = create_review.content_id
-  ) then
-    raise exception 'User already reviewed this content';
-  end if;
+  if auth.uid() is null then raise exception 'Sign in to review content'; end if;
+  if nullif(trim(p_body), '') is null then raise exception 'Review text is required'; end if;
+  select id into content_uuid from public.content where slug = p_content_slug and status = 'published';
+  if content_uuid is null then raise exception 'Content not found'; end if;
+  insert into public.reviews (user_id, content_id, body, title, is_spoiler) values (auth.uid(), content_uuid, trim(p_body), p_title, p_is_spoiler)
+  on conflict (user_id, content_id) do update set body = excluded.body, title = excluded.title, is_spoiler = excluded.is_spoiler, updated_at = now() returning * into result;
+  return result;
+end; $$;
 
-  insert into reviews (user_id, content_id, review_text)
-  values (user_id, content_id, review_text)
-  returning *;
-end;
-$$;
-
-
--- Update existing review
-create or replace function update_review(
-  review_id uuid,
-  new_review_text text
-)
-returns reviews
-language plpgsql
-security invoker
-as $$
-update reviews
-set review_text = new_review_text,
-    updated_at = now()
-where id = update_review.review_id
-  returning *;
-$$;
-
-
--- Delete a review
-create or replace function delete_review(
-  review_id uuid
-)
-returns reviews
-language plpgsql
-security invoker
-as $$
-delete from reviews
-where id = delete_review.review_id
-returning *;
-$$;
-
-
--- Get user's review for specific content
-create or replace function get_user_review(
-  user_id uuid,
-  content_id uuid
-)
-returns reviews
-language sql
-security invoker
-as $$
-select * from reviews
-where user_id = get_user_review.user_id
-  and content_id = get_user_review.content_id;
-$$;
-
-
--- Get aggregated ratings for content
-create or replace function get_content_ratings(
-  c_id uuid
-)
-returns table (average_rating numeric, rating_count int)
-language sql
-security invoker
-as $$
-select
-  avg(rating) as average_rating,
-  count(*) as rating_count
-from content_ratings
-where content_id = c_id;
-$$;
-
-
--- Get paginated reviews for content
-create or replace function get_content_reviews(
-  c_id uuid,
-  page int,
-  per_page int
-)
-returns reviews
-language plpgsql
-security invoker
-as $$
-begin
-  return query
-  select * from reviews
-  where content_id = c_id
-  order by created_at desc
-  offset (page - 1) * per_page
-  limit per_page;
-end;
+create or replace function public.get_content_reviews(p_content_slug text, p_page integer default 1, p_page_size integer default 20)
+returns setof public.reviews language sql stable security invoker set search_path = '' as $$
+  select r.* from public.reviews r join public.content c on c.id = r.content_id where c.slug = p_content_slug
+  order by r.created_at desc limit least(greatest(p_page_size, 1), 100) offset (greatest(p_page, 1) - 1) * least(greatest(p_page_size, 1), 100);
 $$;

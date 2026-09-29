@@ -1,53 +1,52 @@
-import { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabase';
-import { mockHero, mockContentRows } from '@/data/mockData';
+import { useEffect, useState } from 'react'
+import { supabase } from '@/lib/supabase/client'
+import { mockContentRows } from '@/data/mockData'
+import type { ContentItem, ContentRow } from '@/data/types'
 
-type ContentRowType = 'continue_watching' | 'trending' | 'new_releases' | 'genre';
+type ContentRowWithKind = ContentRow & { type: string }
 
 const useContent = () => {
-  const [featuredContent, setFeaturedContent] = useState(mockHero);
-  const [contentRows, setContentRows] = useState(mockContentRows);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+    const [contentRows, setContentRows] = useState<ContentRowWithKind[]>(mockContentRows)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const fetchContent = async () => {
+    let cancelled = false
+    const load = async () => {
       if (!supabase) {
-        setLoading(false);
-        return;
+        setContentRows(mockContentRows as ContentRowWithKind[])
+        setLoading(false)
+        return
       }
-
       try {
-        // Fetch featured content
-        const { data: featuredData, error: featuredError } = await supabase.rpc('get_featured_content');
-        if (featuredError) throw featuredError;
-        setFeaturedContent(featuredData);
-
-        // Fetch content rows
-        const rowTypes: ContentRowType[] = ['continue_watching', 'trending', 'new_releases', 'genre'];
-        const rowPromises = rowTypes.map(type => 
-          supabase.rpc('get_content_list', { type })
-        );
-        const rowData = await Promise.all(rowPromises);
-        const rows = rowData.map((result, index) => {
-          if (result.error) throw result.error;
-          return { type: rowTypes[index], ...result.data };
-        });
-        setContentRows(rows);
-      } catch (err) {
-        setError('Failed to fetch content');
-        // Fallback to mock data
-        setFeaturedContent(mockHero);
-        setContentRows(mockContentRows);
+        const [trendingResult, newResult] = await Promise.all([
+          supabase.rpc('get_trending_content', { p_limit: 12 }),
+          supabase.rpc('get_new_releases', { p_page: 1, p_page_size: 12 }),
+        ])
+        if (trendingResult.error) throw trendingResult.error
+        if (newResult.error) throw newResult.error
+        if (cancelled) return
+        const trending = (trendingResult.data ?? []) as ContentItem[]
+        const newReleases = (newResult.data ?? []) as ContentItem[]
+        if (trending.length === 0 && newReleases.length === 0) {
+          setContentRows(mockContentRows)
+        } else {
+          setContentRows([
+            { id: 'trending', type: 'trending', title: 'Trending Now', items: trending },
+            { id: 'new-releases', type: 'new_releases', title: 'New Releases', items: newReleases },
+          ])
+        }
+      } catch {
+        if (cancelled) return
+        setContentRows(mockContentRows as ContentRowWithKind[])
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false)
       }
-    };
+    }
+    void load()
+    return () => { cancelled = true }
+  }, [])
 
-    fetchContent();
-  }, []);
+  return { contentRows, loading }
+}
 
-  return { featuredContent, contentRows, loading, error };
-};
-
-export default useContent;
+export default useContent

@@ -1,2 +1,6 @@
-Node_modules/
+node_modules/
 .env
+.env.*
+!.env.example
+!src/lib/supabase/.env.example
+dist/

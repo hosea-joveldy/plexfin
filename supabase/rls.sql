@@ -1,30 +1,41 @@
--- Enable RLS on all tables
-ALTER TABLE content ENABLE ROW LEVEL SECURITY;
-ALTER TABLE genres ENABLE ROW LEVEL SECURITY;
-ALTER TABLE languages ENABLE ROW LEVEL SECURITY;
-ALTER TABLE ratings ENABLE ROW LEVEL SECURITY;
-ALTER TABLE watch_history ENABLE ROW LEVEL SECURITY;
-ALTER TABLE reviews ENABLE ROW LEVEL SECURITY;
-ALTER TABLE settings ENABLE ROW LEVEL SECURITY;
-ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+-- Row-level security for the tables created by schema.sql.
+-- Run after schema.sql and auth-setup.sql.
+drop policy if exists users_select_self on public.users;
+drop policy if exists profiles_select_public_or_self on public.profiles;
+drop policy if exists profiles_update_self on public.profiles;
+drop policy if exists content_read_published on public.content;
+drop policy if exists content_admin_manage on public.content;
+drop policy if exists genres_read on public.genres;
+drop policy if exists content_genres_read on public.content_genres;
+drop policy if exists languages_read on public.languages;
+drop policy if exists content_languages_read on public.content_languages;
+drop policy if exists ratings_read on public.ratings;
+drop policy if exists ratings_manage_self on public.ratings;
+drop policy if exists content_ratings_read on public.content_ratings;
+drop policy if exists watch_history_manage_self on public.watch_history;
+drop policy if exists reviews_read on public.reviews;
+drop policy if exists reviews_manage_self on public.reviews;
+drop policy if exists settings_manage_self on public.settings;
 
--- Public data: All authenticated users can read
-CREATE POLICY content_select ON content FOR SELECT TO authenticated USING (true);
-CREATE POLICY genres_select ON genres FOR SELECT TO authenticated USING (true);
-CREATE POLICY languages_select ON languages FOR SELECT TO authenticated USING (true);
-CREATE POLICY ratings_select ON ratings FOR SELECT TO authenticated USING (true);
+do $$ declare t text; begin
+  foreach t in array array['users','profiles','content','genres','content_genres','languages','content_languages','ratings','content_ratings','watch_history','reviews','settings'] loop
+    execute format('alter table public.%I enable row level security', t);
+  end loop;
+end $$;
 
--- User-specific data: Read/write own records
-CREATE POLICY watch_history_user ON watch_history FOR ALL TO authenticated USING (user_id = auth.uid());
-CREATE POLICY reviews_user ON reviews FOR ALL TO authenticated USING (user_id = auth.uid());
-CREATE POLICY settings_user ON settings FOR ALL TO authenticated USING (user_id = auth.uid());
-CREATE POLICY user_ratings_user ON user_ratings FOR ALL TO authenticated USING (user_id = auth.uid());
-
--- Profiles: Read own profile only
-CREATE POLICY profiles_select ON profiles FOR SELECT TO authenticated USING (user_id = auth.uid());
-
--- Admins can manage content
-CREATE POLICY content_admin ON content FOR INSERT, UPDATE, DELETE TO authenticated USING (auth.jwt() ->> 'role' = 'admin');
-
--- Content ratings (read own)
-CREATE POLICY content_ratings_user ON content_ratings FOR SELECT TO authenticated USING (user_id = auth.uid());
+create policy users_select_self on public.users for select to authenticated using (id = (select auth.uid()));
+create policy profiles_select_public_or_self on public.profiles for select to authenticated using (is_public or id = (select auth.uid()));
+create policy profiles_update_self on public.profiles for update to authenticated using (id = (select auth.uid())) with check (id = (select auth.uid()));
+create policy content_read_published on public.content for select to anon, authenticated using (status = 'published');
+create policy content_admin_manage on public.content for all to authenticated using (public.is_media_admin()) with check (public.is_media_admin());
+create policy genres_read on public.genres for select to anon, authenticated using (true);
+create policy content_genres_read on public.content_genres for select to anon, authenticated using (true);
+create policy languages_read on public.languages for select to anon, authenticated using (true);
+create policy content_languages_read on public.content_languages for select to anon, authenticated using (true);
+create policy ratings_read on public.ratings for select to anon, authenticated using (true);
+create policy ratings_manage_self on public.ratings for all to authenticated using (user_id = (select auth.uid())) with check (user_id = (select auth.uid()));
+create policy content_ratings_read on public.content_ratings for select to anon, authenticated using (true);
+create policy watch_history_manage_self on public.watch_history for all to authenticated using (user_id = (select auth.uid())) with check (user_id = (select auth.uid()));
+create policy reviews_read on public.reviews for select to anon, authenticated using (true);
+create policy reviews_manage_self on public.reviews for all to authenticated using (user_id = (select auth.uid())) with check (user_id = (select auth.uid()));
+create policy settings_manage_self on public.settings for all to authenticated using (user_id = (select auth.uid())) with check (user_id = (select auth.uid()));

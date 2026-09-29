@@ -289,3 +289,14 @@ create index if not exists settings_preferred_language_idx on public.settings (p
 create trigger settings_set_updated_at
   before update on public.settings
   for each row execute function public.set_updated_at();
+
+-- Shared authorization checks used by RLS and Storage policies.
+create or replace function public.is_active_user()
+returns boolean language sql stable security definer set search_path = '' as $$
+  select exists (select 1 from public.users where id = auth.uid() and is_active);
+$$;
+
+create or replace function public.is_media_admin()
+returns boolean language sql stable security definer set search_path = '' as $$
+  select exists (select 1 from public.users where id = auth.uid() and is_active and role = 'admin');
+$$;
