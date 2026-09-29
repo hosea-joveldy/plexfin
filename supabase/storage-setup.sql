@@ -1,4 +1,9 @@
 -- Storage buckets and policies. Uploads should use the Supabase Storage SDK.
+-- Remove policies from the earlier setup draft.
+drop policy if exists videos_insert on storage.objects;
+drop policy if exists videos_select on storage.objects;
+drop policy if exists thumbnails_insert on storage.objects;
+drop policy if exists thumbnails_select on storage.objects;
 -- Video files are private; thumbnail assets are publicly readable.
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values ('videos', 'videos', false, 524288000, array['video/mp4','video/webm','video/quicktime','video/x-matroska'])

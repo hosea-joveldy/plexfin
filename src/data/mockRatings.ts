@@ -50,7 +50,7 @@ export interface DurationOption {
 /* Catalog                                                             */
 /* ------------------------------------------------------------------ */
 
-const thumb = (seed: string) => `https://picsum.photos/seed/${seed}/300/450`;
+const thumb = (seed: string) => `/posters/${seed}.jpg`;
 
 export const mockRatingsCatalog: RatingsFilterDataItem[] = [
   { id: "rt-1", title: "The Last Horizon", year: 2024, rating: "PG-13", starRating: 8.4, genre: "Sci-Fi", durationMinutes: 142, language: "English", thumbnail: thumb("rt-1"), type: "movie" },

@@ -369,3 +369,13 @@ returns jsonb language sql stable set search_path = '' as $$
   order by c.is_featured desc, c.release_year desc, c.created_at desc, c.id
   limit 1;
 $$;
+
+
+-- Fetch a catalog item by the slug used in local UI routes.
+create or replace function public.get_content_by_slug(p_slug text)
+returns jsonb language sql stable set search_path = '' as $$
+  select public.content_item_json(c)
+  from public.content c
+  where c.slug = p_slug and c.status = 'published'
+  limit 1;
+$$;

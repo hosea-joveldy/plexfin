@@ -4,3 +4,7 @@ node_modules/
 !.env.example
 !src/lib/supabase/.env.example
 dist/
+
+# Keep locally supplied movie files out of source control.
+public/movies/*
+!public/movies/.gitkeep

@@ -1,15 +1,8 @@
 import type { ContentItem, ContentRow } from "./types"
 
-/**
- * Placeholder images are generated with placehold.co so every card has a
- * stable, valid image URL without sourcing real media. Swap these out for
- * real thumbnails when content is provided.
- */
-function placeholder(portrait: boolean, title: string): string {
-  const encoded = encodeURIComponent(title)
-  return portrait
-    ? `https://placehold.co/400x600/333/666?text=${encoded}`
-    : `https://placehold.co/1600x900/444/888?text=${encoded}`
+/** Local static paths; add supplied files to public/posters using the content slug. */
+function localPoster(slug: string): string {
+  return `/posters/${slug}.jpg`
 }
 
 interface MockItemInput {
@@ -29,8 +22,9 @@ function makeItem(input: MockItemInput): ContentItem {
   const { progressPercent, ...rest } = input
   return {
     ...rest,
-    thumbnailUrl: placeholder(true, input.title),
-    backdropUrl: placeholder(false, input.title),
+    thumbnailUrl: localPoster(input.id),
+    backdropUrl: localPoster(input.id),
+    videoUrl: `/movies/${input.id}.mp4`,
     ...(progressPercent !== undefined ? { progressPercent } : {}),
   }
 }

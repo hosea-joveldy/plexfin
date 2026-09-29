@@ -25,6 +25,8 @@ export interface ContentItem {
   durationMinutes: number
   /** Star rating out of 5, used by the ratings filter page. */
   stars?: number
+  /** Optional local video path under public/movies/, e.g. /movies/my-film.mp4. */
+  videoUrl?: string
   /** Optional watch progress (0–100), set only for in-progress items. */
   progressPercent?: number
 }

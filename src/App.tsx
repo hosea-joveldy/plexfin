@@ -4,6 +4,7 @@ import Home from "@/pages/Home";
 import SearchResultsPage from "@/pages/SearchResultsPage";
 import RatingsFilter from "@/pages/RatingsFilter";
 import Settings from "@/pages/Settings";
+import ContentDetailPage from "@/pages/ContentDetailPage";
 
 export default function App() {
   return (
@@ -13,6 +14,7 @@ export default function App() {
         <Route path="/search" element={<SearchResultsPage />} />
         <Route path="/ratings" element={<RatingsFilter />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/content/:id" element={<ContentDetailPage />} />
       </Route>
     </Routes>
   );

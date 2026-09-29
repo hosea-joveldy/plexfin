@@ -1,5 +1,17 @@
 -- Row-level security for the tables created by schema.sql.
 -- Run after schema.sql and auth-setup.sql.
+-- Remove names used by the first draft so old permissive rules do not stack.
+drop policy if exists content_select on public.content;
+drop policy if exists genres_select on public.genres;
+drop policy if exists languages_select on public.languages;
+drop policy if exists ratings_select on public.ratings;
+drop policy if exists watch_history_user on public.watch_history;
+drop policy if exists reviews_user on public.reviews;
+drop policy if exists settings_user on public.settings;
+drop policy if exists profiles_select on public.profiles;
+drop policy if exists content_admin on public.content;
+drop policy if exists content_ratings_user on public.content_ratings;
+
 drop policy if exists users_select_self on public.users;
 drop policy if exists profiles_select_public_or_self on public.profiles;
 drop policy if exists profiles_update_self on public.profiles;

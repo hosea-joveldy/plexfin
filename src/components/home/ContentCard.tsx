@@ -35,6 +35,7 @@ export default function ContentCard({
           alt=""
           loading="lazy"
           className="h-full w-full object-cover"
+          onError={(event) => { event.currentTarget.src = "/posters/placeholder.svg" }}
         />
 
         {/* Hover overlay: scrim + title + metadata */}

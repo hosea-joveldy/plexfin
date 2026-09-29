@@ -11,8 +11,8 @@ export const heroContent: ContentItem[] = [
     description:
       "When a storm cuts off the only lighthouse on a remote island, its lone keeper must decode a series of mysterious signals before the sea claims what's left of the coast.",
     logline: "One keeper. One storm. One last signal.",
-    thumbnailUrl: "https://placehold.co/400x600/333/666?text=The+Last+Lighthouse",
-    backdropUrl: "https://placehold.co/1600x900/444/888?text=The+Last+Lighthouse",
+    thumbnailUrl: "/posters/the-last-lighthouse.jpg",
+    backdropUrl: "/posters/the-last-lighthouse-backdrop.jpg",
     year: 2025,
     rating: "PG-13",
     genres: ["Drama", "Thriller"],

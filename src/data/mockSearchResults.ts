@@ -17,7 +17,7 @@ export const mockSearchResults = [
     rating: "PG-13",
     genre: "Sci-Fi",
     duration: "142 min",
-    thumbnail: "https://picsum.photos/seed/sr-1/300/450",
+    thumbnail: "/posters/sr-1.jpg",
     type: "movie" as const,
   },
   {
@@ -27,7 +27,7 @@ export const mockSearchResults = [
     rating: "TV-14",
     genre: "Sci-Fi",
     duration: "10 episodes",
-    thumbnail: "https://picsum.photos/seed/sr-2/300/450",
+    thumbnail: "/posters/sr-2.jpg",
     type: "show" as const,
   },
   {
@@ -37,7 +37,7 @@ export const mockSearchResults = [
     rating: "R",
     genre: "Thriller",
     duration: "118 min",
-    thumbnail: "https://picsum.photos/seed/sr-3/300/450",
+    thumbnail: "/posters/sr-3.jpg",
     type: "movie" as const,
   },
   {
@@ -47,7 +47,7 @@ export const mockSearchResults = [
     rating: "TV-MA",
     genre: "Drama",
     duration: "8 episodes",
-    thumbnail: "https://picsum.photos/seed/sr-4/300/450",
+    thumbnail: "/posters/sr-4.jpg",
     type: "show" as const,
   },
   {
@@ -57,7 +57,7 @@ export const mockSearchResults = [
     rating: "PG-13",
     genre: "Sci-Fi",
     duration: "139 min",
-    thumbnail: "https://picsum.photos/seed/sr-5/300/450",
+    thumbnail: "/posters/sr-5.jpg",
     type: "movie" as const,
   },
   {
@@ -67,7 +67,7 @@ export const mockSearchResults = [
     rating: "R",
     genre: "Mystery",
     duration: "112 min",
-    thumbnail: "https://picsum.photos/seed/sr-6/300/450",
+    thumbnail: "/posters/sr-6.jpg",
     type: "movie" as const,
   },
   {
@@ -77,7 +77,7 @@ export const mockSearchResults = [
     rating: "PG",
     genre: "Adventure",
     duration: "105 min",
-    thumbnail: "https://picsum.photos/seed/sr-7/300/450",
+    thumbnail: "/posters/sr-7.jpg",
     type: "movie" as const,
   },
   {
@@ -87,7 +87,7 @@ export const mockSearchResults = [
     rating: "TV-MA",
     genre: "Thriller",
     duration: "8 episodes",
-    thumbnail: "https://picsum.photos/seed/sr-8/300/450",
+    thumbnail: "/posters/sr-8.jpg",
     type: "show" as const,
   },
   {
@@ -97,7 +97,7 @@ export const mockSearchResults = [
     rating: "PG",
     genre: "Music",
     duration: "98 min",
-    thumbnail: "https://picsum.photos/seed/sr-9/300/450",
+    thumbnail: "/posters/sr-9.jpg",
     type: "movie" as const,
   },
   {
@@ -107,7 +107,7 @@ export const mockSearchResults = [
     rating: "PG-13",
     genre: "Sci-Fi",
     duration: "156 min",
-    thumbnail: "https://picsum.photos/seed/sr-10/300/450",
+    thumbnail: "/posters/sr-10.jpg",
     type: "movie" as const,
   },
   {
@@ -117,7 +117,7 @@ export const mockSearchResults = [
     rating: "R",
     genre: "Action",
     duration: "121 min",
-    thumbnail: "https://picsum.photos/seed/sr-11/300/450",
+    thumbnail: "/posters/sr-11.jpg",
     type: "movie" as const,
   },
   {
@@ -127,7 +127,7 @@ export const mockSearchResults = [
     rating: "PG",
     genre: "Drama",
     duration: "110 min",
-    thumbnail: "https://picsum.photos/seed/sr-12/300/450",
+    thumbnail: "/posters/sr-12.jpg",
     type: "movie" as const,
   },
 ] as SearchResultItem[];

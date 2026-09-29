@@ -5,6 +5,16 @@ import type { ContentItem, ContentRow } from '@/data/types'
 
 type ContentRowWithKind = ContentRow & { type: string }
 
+function useLocalMedia(item: ContentItem): ContentItem {
+  const id = encodeURIComponent(item.id)
+  return {
+    ...item,
+    thumbnailUrl: `/posters/${id}.jpg`,
+    backdropUrl: `/posters/${id}-backdrop.jpg`,
+    videoUrl: `/movies/${id}.mp4`,
+  }
+}
+
 const useContent = () => {
     const [contentRows, setContentRows] = useState<ContentRowWithKind[]>(mockContentRows)
   const [loading, setLoading] = useState(true)
@@ -25,8 +35,8 @@ const useContent = () => {
         if (trendingResult.error) throw trendingResult.error
         if (newResult.error) throw newResult.error
         if (cancelled) return
-        const trending = (trendingResult.data ?? []) as ContentItem[]
-        const newReleases = (newResult.data ?? []) as ContentItem[]
+        const trending = ((trendingResult.data ?? []) as ContentItem[]).map(useLocalMedia)
+        const newReleases = ((newResult.data ?? []) as ContentItem[]).map(useLocalMedia)
         if (trending.length === 0 && newReleases.length === 0) {
           setContentRows(mockContentRows)
         } else {

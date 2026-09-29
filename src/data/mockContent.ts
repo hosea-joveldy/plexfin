@@ -19,7 +19,7 @@ export const mockContentRows = {
       rating: "R",
       genre: "Thriller",
       duration: "118 min",
-      thumbnail: "https://picsum.photos/seed/cw-1/300/450",
+      thumbnail: "/posters/cw-1.jpg",
       progress: 45,
     },
     {
@@ -29,7 +29,7 @@ export const mockContentRows = {
       rating: "PG-13",
       genre: "Sci-Fi",
       duration: "134 min",
-      thumbnail: "https://picsum.photos/seed/cw-2/300/450",
+      thumbnail: "/posters/cw-2.jpg",
       progress: 72,
     },
     {
@@ -39,7 +39,7 @@ export const mockContentRows = {
       rating: "TV-MA",
       genre: "Drama",
       duration: "8 episodes",
-      thumbnail: "https://picsum.photos/seed/cw-3/300/450",
+      thumbnail: "/posters/cw-3.jpg",
       progress: 30,
     },
     {
@@ -49,7 +49,7 @@ export const mockContentRows = {
       rating: "PG",
       genre: "Animation",
       duration: "96 min",
-      thumbnail: "https://picsum.photos/seed/cw-4/300/450",
+      thumbnail: "/posters/cw-4.jpg",
       progress: 88,
     },
     {
@@ -59,7 +59,7 @@ export const mockContentRows = {
       rating: "PG-13",
       genre: "Fantasy",
       duration: "127 min",
-      thumbnail: "https://picsum.photos/seed/cw-5/300/450",
+      thumbnail: "/posters/cw-5.jpg",
       progress: 15,
     },
     {
@@ -69,7 +69,7 @@ export const mockContentRows = {
       rating: "TV-14",
       genre: "Sci-Fi",
       duration: "10 episodes",
-      thumbnail: "https://picsum.photos/seed/cw-6/300/450",
+      thumbnail: "/posters/cw-6.jpg",
       progress: 60,
     },
   ] as ContentItem[],
@@ -82,7 +82,7 @@ export const mockContentRows = {
       rating: "PG-13",
       genre: "Sci-Fi",
       duration: "139 min",
-      thumbnail: "https://picsum.photos/seed/tn-1/300/450",
+      thumbnail: "/posters/tn-1.jpg",
     },
     {
       id: "tn-2",
@@ -91,7 +91,7 @@ export const mockContentRows = {
       rating: "R",
       genre: "Mystery",
       duration: "112 min",
-      thumbnail: "https://picsum.photos/seed/tn-2/300/450",
+      thumbnail: "/posters/tn-2.jpg",
     },
     {
       id: "tn-3",
@@ -100,7 +100,7 @@ export const mockContentRows = {
       rating: "PG",
       genre: "Adventure",
       duration: "105 min",
-      thumbnail: "https://picsum.photos/seed/tn-3/300/450",
+      thumbnail: "/posters/tn-3.jpg",
     },
     {
       id: "tn-4",
@@ -109,7 +109,7 @@ export const mockContentRows = {
       rating: "TV-MA",
       genre: "Thriller",
       duration: "8 episodes",
-      thumbnail: "https://picsum.photos/seed/tn-4/300/450",
+      thumbnail: "/posters/tn-4.jpg",
     },
     {
       id: "tn-5",
@@ -118,7 +118,7 @@ export const mockContentRows = {
       rating: "PG",
       genre: "Music",
       duration: "98 min",
-      thumbnail: "https://picsum.photos/seed/tn-5/300/450",
+      thumbnail: "/posters/tn-5.jpg",
     },
     {
       id: "tn-6",
@@ -127,7 +127,7 @@ export const mockContentRows = {
       rating: "PG-13",
       genre: "Sci-Fi",
       duration: "156 min",
-      thumbnail: "https://picsum.photos/seed/tn-6/300/450",
+      thumbnail: "/posters/tn-6.jpg",
     },
     {
       id: "tn-7",
@@ -136,7 +136,7 @@ export const mockContentRows = {
       rating: "R",
       genre: "Action",
       duration: "121 min",
-      thumbnail: "https://picsum.photos/seed/tn-7/300/450",
+      thumbnail: "/posters/tn-7.jpg",
     },
     {
       id: "tn-8",
@@ -145,7 +145,7 @@ export const mockContentRows = {
       rating: "PG",
       genre: "Drama",
       duration: "110 min",
-      thumbnail: "https://picsum.photos/seed/tn-8/300/450",
+      thumbnail: "/posters/tn-8.jpg",
     },
   ] as ContentItem[],
 
@@ -157,7 +157,7 @@ export const mockContentRows = {
       rating: "R",
       genre: "Action",
       duration: "124 min",
-      thumbnail: "https://picsum.photos/seed/act-1/300/450",
+      thumbnail: "/posters/act-1.jpg",
     },
     {
       id: "act-2",
@@ -166,7 +166,7 @@ export const mockContentRows = {
       rating: "PG-13",
       genre: "Action",
       duration: "118 min",
-      thumbnail: "https://picsum.photos/seed/act-2/300/450",
+      thumbnail: "/posters/act-2.jpg",
     },
     {
       id: "act-3",
@@ -175,7 +175,7 @@ export const mockContentRows = {
       rating: "PG-13",
       genre: "Action",
       duration: "132 min",
-      thumbnail: "https://picsum.photos/seed/act-3/300/450",
+      thumbnail: "/posters/act-3.jpg",
     },
     {
       id: "act-4",
@@ -184,7 +184,7 @@ export const mockContentRows = {
       rating: "R",
       genre: "Action",
       duration: "145 min",
-      thumbnail: "https://picsum.photos/seed/act-4/300/450",
+      thumbnail: "/posters/act-4.jpg",
     },
     {
       id: "act-5",
@@ -193,7 +193,7 @@ export const mockContentRows = {
       rating: "TV-MA",
       genre: "Action",
       duration: "10 episodes",
-      thumbnail: "https://picsum.photos/seed/act-5/300/450",
+      thumbnail: "/posters/act-5.jpg",
     },
     {
       id: "act-6",
@@ -202,7 +202,7 @@ export const mockContentRows = {
       rating: "R",
       genre: "Action",
       duration: "127 min",
-      thumbnail: "https://picsum.photos/seed/act-6/300/450",
+      thumbnail: "/posters/act-6.jpg",
     },
   ] as ContentItem[],
 
@@ -214,7 +214,7 @@ export const mockContentRows = {
       rating: "TV-14",
       genre: "Comedy",
       duration: "10 episodes",
-      thumbnail: "https://picsum.photos/seed/com-1/300/450",
+      thumbnail: "/posters/com-1.jpg",
     },
     {
       id: "com-2",
@@ -223,7 +223,7 @@ export const mockContentRows = {
       rating: "PG-13",
       genre: "Comedy",
       duration: "108 min",
-      thumbnail: "https://picsum.photos/seed/com-2/300/450",
+      thumbnail: "/posters/com-2.jpg",
     },
     {
       id: "com-3",
@@ -232,7 +232,7 @@ export const mockContentRows = {
       rating: "TV-MA",
       genre: "Comedy",
       duration: "8 episodes",
-      thumbnail: "https://picsum.photos/seed/com-3/300/450",
+      thumbnail: "/posters/com-3.jpg",
     },
     {
       id: "com-4",
@@ -241,7 +241,7 @@ export const mockContentRows = {
       rating: "PG",
       genre: "Comedy",
       duration: "101 min",
-      thumbnail: "https://picsum.photos/seed/com-4/300/450",
+      thumbnail: "/posters/com-4.jpg",
     },
     {
       id: "com-5",
@@ -250,7 +250,7 @@ export const mockContentRows = {
       rating: "PG-13",
       genre: "Comedy",
       duration: "115 min",
-      thumbnail: "https://picsum.photos/seed/com-5/300/450",
+      thumbnail: "/posters/com-5.jpg",
     },
     {
       id: "com-6",
@@ -259,7 +259,7 @@ export const mockContentRows = {
       rating: "TV-14",
       genre: "Comedy",
       duration: "12 episodes",
-      thumbnail: "https://picsum.photos/seed/com-6/300/450",
+      thumbnail: "/posters/com-6.jpg",
     },
   ] as ContentItem[],
 
@@ -271,7 +271,7 @@ export const mockContentRows = {
       rating: "TV-MA",
       genre: "Drama",
       duration: "12 episodes",
-      thumbnail: "https://picsum.photos/seed/dra-1/300/450",
+      thumbnail: "/posters/dra-1.jpg",
     },
     {
       id: "dra-2",
@@ -280,7 +280,7 @@ export const mockContentRows = {
       rating: "R",
       genre: "Drama",
       duration: "138 min",
-      thumbnail: "https://picsum.photos/seed/dra-2/300/450",
+      thumbnail: "/posters/dra-2.jpg",
     },
     {
       id: "dra-3",
@@ -289,7 +289,7 @@ export const mockContentRows = {
       rating: "PG-13",
       genre: "Drama",
       duration: "116 min",
-      thumbnail: "https://picsum.photos/seed/dra-3/300/450",
+      thumbnail: "/posters/dra-3.jpg",
     },
     {
       id: "dra-4",
@@ -298,7 +298,7 @@ export const mockContentRows = {
       rating: "TV-14",
       genre: "Drama",
       duration: "10 episodes",
-      thumbnail: "https://picsum.photos/seed/dra-4/300/450",
+      thumbnail: "/posters/dra-4.jpg",
     },
     {
       id: "dra-5",
@@ -307,7 +307,7 @@ export const mockContentRows = {
       rating: "R",
       genre: "Drama",
       duration: "142 min",
-      thumbnail: "https://picsum.photos/seed/dra-5/300/450",
+      thumbnail: "/posters/dra-5.jpg",
     },
     {
       id: "dra-6",
@@ -316,7 +316,7 @@ export const mockContentRows = {
       rating: "PG-13",
       genre: "Drama",
       duration: "124 min",
-      thumbnail: "https://picsum.photos/seed/dra-6/300/450",
+      thumbnail: "/posters/dra-6.jpg",
     },
   ] as ContentItem[],
 
@@ -328,7 +328,7 @@ export const mockContentRows = {
       rating: "R",
       genre: "Horror",
       duration: "103 min",
-      thumbnail: "https://picsum.photos/seed/hor-1/300/450",
+      thumbnail: "/posters/hor-1.jpg",
     },
     {
       id: "hor-2",
@@ -337,7 +337,7 @@ export const mockContentRows = {
       rating: "TV-MA",
       genre: "Horror",
       duration: "8 episodes",
-      thumbnail: "https://picsum.photos/seed/hor-2/300/450",
+      thumbnail: "/posters/hor-2.jpg",
     },
     {
       id: "hor-3",
@@ -346,7 +346,7 @@ export const mockContentRows = {
       rating: "R",
       genre: "Horror",
       duration: "117 min",
-      thumbnail: "https://picsum.photos/seed/hor-3/300/450",
+      thumbnail: "/posters/hor-3.jpg",
     },
     {
       id: "hor-4",
@@ -355,7 +355,7 @@ export const mockContentRows = {
       rating: "PG-13",
       genre: "Horror",
       duration: "99 min",
-      thumbnail: "https://picsum.photos/seed/hor-4/300/450",
+      thumbnail: "/posters/hor-4.jpg",
     },
     {
       id: "hor-5",
@@ -364,7 +364,7 @@ export const mockContentRows = {
       rating: "R",
       genre: "Horror",
       duration: "129 min",
-      thumbnail: "https://picsum.photos/seed/hor-5/300/450",
+      thumbnail: "/posters/hor-5.jpg",
     },
     {
       id: "hor-6",
@@ -373,7 +373,7 @@ export const mockContentRows = {
       rating: "TV-MA",
       genre: "Horror",
       duration: "10 episodes",
-      thumbnail: "https://picsum.photos/seed/hor-6/300/450",
+      thumbnail: "/posters/hor-6.jpg",
     },
   ] as ContentItem[],
 
@@ -385,7 +385,7 @@ export const mockContentRows = {
       rating: "PG-13",
       genre: "Sci-Fi",
       duration: "151 min",
-      thumbnail: "https://picsum.photos/seed/sci-1/300/450",
+      thumbnail: "/posters/sci-1.jpg",
     },
     {
       id: "sci-2",
@@ -394,7 +394,7 @@ export const mockContentRows = {
       rating: "TV-14",
       genre: "Sci-Fi",
       duration: "12 episodes",
-      thumbnail: "https://picsum.photos/seed/sci-2/300/450",
+      thumbnail: "/posters/sci-2.jpg",
     },
     {
       id: "sci-3",
@@ -403,7 +403,7 @@ export const mockContentRows = {
       rating: "PG-13",
       genre: "Sci-Fi",
       duration: "137 min",
-      thumbnail: "https://picsum.photos/seed/sci-3/300/450",
+      thumbnail: "/posters/sci-3.jpg",
     },
     {
       id: "sci-4",
@@ -412,7 +412,7 @@ export const mockContentRows = {
       rating: "R",
       genre: "Sci-Fi",
       duration: "144 min",
-      thumbnail: "https://picsum.photos/seed/sci-4/300/450",
+      thumbnail: "/posters/sci-4.jpg",
     },
     {
       id: "sci-5",
@@ -421,7 +421,7 @@ export const mockContentRows = {
       rating: "TV-MA",
       genre: "Sci-Fi",
       duration: "8 episodes",
-      thumbnail: "https://picsum.photos/seed/sci-5/300/450",
+      thumbnail: "/posters/sci-5.jpg",
     },
     {
       id: "sci-6",
@@ -430,7 +430,7 @@ export const mockContentRows = {
       rating: "PG-13",
       genre: "Sci-Fi",
       duration: "128 min",
-      thumbnail: "https://picsum.photos/seed/sci-6/300/450",
+      thumbnail: "/posters/sci-6.jpg",
     },
   ] as ContentItem[],
 
@@ -442,7 +442,7 @@ export const mockContentRows = {
       rating: "R",
       genre: "Drama",
       duration: "158 min",
-      thumbnail: "https://picsum.photos/seed/tr-1/300/450",
+      thumbnail: "/posters/tr-1.jpg",
     },
     {
       id: "tr-2",
@@ -451,7 +451,7 @@ export const mockContentRows = {
       rating: "PG-13",
       genre: "Romance",
       duration: "112 min",
-      thumbnail: "https://picsum.photos/seed/tr-2/300/450",
+      thumbnail: "/posters/tr-2.jpg",
     },
     {
       id: "tr-3",
@@ -460,7 +460,7 @@ export const mockContentRows = {
       rating: "TV-MA",
       genre: "Sci-Fi",
       duration: "10 episodes",
-      thumbnail: "https://picsum.photos/seed/tr-3/300/450",
+      thumbnail: "/posters/tr-3.jpg",
     },
     {
       id: "tr-4",
@@ -469,7 +469,7 @@ export const mockContentRows = {
       rating: "R",
       genre: "Thriller",
       duration: "135 min",
-      thumbnail: "https://picsum.photos/seed/tr-4/300/450",
+      thumbnail: "/posters/tr-4.jpg",
     },
     {
       id: "tr-5",
@@ -478,7 +478,7 @@ export const mockContentRows = {
       rating: "PG-13",
       genre: "Sci-Fi",
       duration: "149 min",
-      thumbnail: "https://picsum.photos/seed/tr-5/300/450",
+      thumbnail: "/posters/tr-5.jpg",
     },
     {
       id: "tr-6",
@@ -487,7 +487,7 @@ export const mockContentRows = {
       rating: "PG",
       genre: "Music",
       duration: "123 min",
-      thumbnail: "https://picsum.photos/seed/tr-6/300/450",
+      thumbnail: "/posters/tr-6.jpg",
     },
   ] as ContentItem[],
 
@@ -499,7 +499,7 @@ export const mockContentRows = {
       rating: "PG-13",
       genre: "Sci-Fi",
       duration: "141 min",
-      thumbnail: "https://picsum.photos/seed/nr-1/300/450",
+      thumbnail: "/posters/nr-1.jpg",
     },
     {
       id: "nr-2",
@@ -508,7 +508,7 @@ export const mockContentRows = {
       rating: "TV-14",
       genre: "Fantasy",
       duration: "8 episodes",
-      thumbnail: "https://picsum.photos/seed/nr-2/300/450",
+      thumbnail: "/posters/nr-2.jpg",
     },
     {
       id: "nr-3",
@@ -517,7 +517,7 @@ export const mockContentRows = {
       rating: "R",
       genre: "Drama",
       duration: "119 min",
-      thumbnail: "https://picsum.photos/seed/nr-3/300/450",
+      thumbnail: "/posters/nr-3.jpg",
     },
     {
       id: "nr-4",
@@ -526,7 +526,7 @@ export const mockContentRows = {
       rating: "PG-13",
       genre: "Action",
       duration: "133 min",
-      thumbnail: "https://picsum.photos/seed/nr-4/300/450",
+      thumbnail: "/posters/nr-4.jpg",
     },
     {
       id: "nr-5",
@@ -535,7 +535,7 @@ export const mockContentRows = {
       rating: "PG",
       genre: "Romance",
       duration: "107 min",
-      thumbnail: "https://picsum.photos/seed/nr-5/300/450",
+      thumbnail: "/posters/nr-5.jpg",
     },
     {
       id: "nr-6",
@@ -544,7 +544,7 @@ export const mockContentRows = {
       rating: "TV-MA",
       genre: "Thriller",
       duration: "12 episodes",
-      thumbnail: "https://picsum.photos/seed/nr-6/300/450",
+      thumbnail: "/posters/nr-6.jpg",
     },
   ] as ContentItem[],
 };
